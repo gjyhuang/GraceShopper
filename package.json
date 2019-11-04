@@ -1,7 +1,7 @@
 {
   "name": "boilermaker",
   "version": "2.0.0",
-  "description": "Some boilerplate code to get you started - get shakin'!",
+  "description": "Staten APIsland Grace Shopper Project",
   "engines": {
     "node": ">= 7.0.0"
   },
