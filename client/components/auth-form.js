@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {auth} from '../store';
+import {auth, signUp} from '../store';
 
 /**
  * COMPONENT
@@ -24,19 +24,26 @@ const AuthForm = props => {
           </label>
           <input id="password" name="password" type="password" />
         </div>
-        {/* create first name and last name fields here */}
-        <div>
-          <label htmlFor="firstName">
-            <small>First Name</small>
-            <input id="firstName" name="firstName" type="text" />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="lastName">
-            <small>Last Name</small>
-            <input id="lastName" name="lastName" type="text" />
-          </label>
-        </div>
+        {/* create first name and last name fields here, depending on whether "name" on props is login or signup*/}
+        {name === 'signup' ? (
+          <div>
+            <div>
+              <label htmlFor="firstName">
+                <small>First Name</small>
+                <input id="firstName" name="firstName" type="text" />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="lastName">
+                <small>Last Name</small>
+                <input id="lastName" name="lastName" type="text" />
+              </label>
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
+
         <div>
           <button type="submit">{displayName}</button>
         </div>
@@ -72,7 +79,15 @@ const mapDispatch = dispatch => ({
     const formName = evt.target.name;
     const email = evt.target.email.value;
     const password = evt.target.password.value;
-    dispatch(auth(email, password, formName));
+    if (formName === 'login') {
+      dispatch(auth(email, password));
+    } else if (formName === 'signup') {
+      // else if this form is a signup, how do I register a new user?
+      const firstName = evt.target.firstName.value;
+      const lastName = evt.target.lastName.value;
+      const user = {firstName, lastName, email, password};
+      dispatch(signUp(user));
+    }
   }
 });
 
