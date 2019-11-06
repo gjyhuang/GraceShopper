@@ -14,7 +14,9 @@ const OrderItem = db.define('orderItem', {
   },
   // quantity column
   quantity: {
-    type: Sequelize.NUMBER
+    type: Sequelize.NUMBER,
+    allowNull: false,
+    defaultValue: 1
   }
 });
 

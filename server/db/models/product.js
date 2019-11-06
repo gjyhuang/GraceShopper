@@ -16,6 +16,11 @@ const Product = db.define('product', {
   },
   imageUrl: {
     type: Sequelize.STRING
+  },
+  amountInStock: {
+    type: Sequelize.NUMBER,
+    allowNull: false,
+    defaultValue: 0
   }
 });
 
