@@ -1,11 +1,31 @@
 const User = require('./user');
-
+const Order = require('./order');
+const Product = require('./product');
+const CardInfo = require('./cardInfo');
+const ShippingAddress = require('./shippingAddress');
+const OrderItem = require('./orderItem');
 /**
- * If we had any associations to make, this would be a great place to put them!
- * ex. if we had another model called BlogPost, we might say:
- *
- *    BlogPost.belongsTo(User)
+ * Model associations
  */
+
+// each user can have more than one payment method
+User.hasMany(cardInfo);
+CardInfo.hasOne(User);
+
+// each user can have more than one shipping address
+User.hasMany(ShippingAddress);
+ShippingAddress.hasOne(User);
+
+// every user can have more than one order (only one can be pending, but others can be in different states) - should we have a shopping cart as a second model?
+User.hasMany(Order);
+Order.hasOne(User);
+
+// create associations with the orderItem - for Order table and for Product table
+OrderItem.belongsTo(Product);
+Product.hasMany(OrderItem);
+
+OrderItem.belongsTo(Order);
+Order.hasMany(Product);
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -14,5 +34,9 @@ const User = require('./user');
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-  User
+  User,
+  Order,
+  Product,
+  CardInfo,
+  ShippingAddress
 };
