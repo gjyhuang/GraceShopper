@@ -74,10 +74,17 @@ const seed = async () => {
   // seed your database here!
 
   await Promise.all(
-    users.map(id => {
-      return User.create(id);
+    users.map(user => {
+      return User.create(user);
     })
   );
+
+  await Promise.all(
+    products.map(product => {
+      return Product.create(product);
+    })
+  );
+
   console.log(green('Seeding success!'));
   db.close();
 };
