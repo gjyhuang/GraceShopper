@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../store';
 import SingleProduct from './products-single';
-import getAllProductsThunk from '../store/products';
+import {getAllProductsThunk} from '../store/products';
 
 class Products extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class Products extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.getAllProducts();
+    this.props.getAllProducts();
   }
 
   render() {
@@ -31,7 +31,7 @@ class Products extends React.Component {
 const mapStateToProps = state => {
   console.log(state);
   return {
-    products: state.allProducts
+    products: state.products
   };
 };
 
