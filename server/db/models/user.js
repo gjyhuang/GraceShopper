@@ -7,7 +7,7 @@ const User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      is: ['^[a-z]+$', 'i'],
+      is: ['^[a-z]+$', 'i', ' '],
       notEmpty: true
     }
   },
@@ -15,7 +15,7 @@ const User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      is: ['^[a-z]+$', 'i'],
+      is: ['^[a-z]+$', 'i', ' '],
       notEmpty: true
     }
   },
