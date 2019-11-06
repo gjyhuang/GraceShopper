@@ -13,7 +13,7 @@ const ShippingAddress = db.define('shippingAddress', {
     type: Sequelize.STRING
   },
   adressZipCode: {
-    type: Sequelize.NUMBER,
+    type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
       notEmpty: true

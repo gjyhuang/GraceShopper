@@ -30,14 +30,14 @@ const CardInfo = db.define('cardInfo', {
     type: Sequelize.STRING
   },
   billingAdressZipCode: {
-    type: Sequelize.NUMBER,
+    type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
       notEmpty: true
     }
   },
   cvv: {
-    type: Sequelize.NUMBER,
+    type: Sequelize.INTEGER,
     // This is a hack to get around Sequelize's lack of a "private" option.
     get() {
       return () => this.getDataValue('password');
