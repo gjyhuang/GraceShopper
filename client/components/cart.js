@@ -7,7 +7,6 @@ import {logout} from '../store';
 const Cart = () => (
   <div className="shopping-cart">
     <h1>Your shopping cart</h1>
-    <hr />
   </div>
 );
 
