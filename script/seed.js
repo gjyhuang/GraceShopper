@@ -1,42 +1,85 @@
-const db = require('../server/db');
-const {User} = require('../server/db/models');
+const {db} = require('../server/db');
+const {green, red} = require('chalk');
+const {User, Product} = require('../server/db/models/index');
 
-async function seed() {
-  await db.sync({force: true});
-  console.log('db synced!');
-
-  const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
-  ]);
-
-  console.log(`seeded ${users.length} users`);
-  console.log('seeded successfully');
-}
-
-// We've separated the `seed` function from the `runSeed` function.
-// This way we can isolate the error handling and exit trapping.
-// The `seed` function is concerned only with modifying the database.
-async function runSeed() {
-  console.log('seeding...');
-  try {
-    await seed();
-  } catch (err) {
-    console.error(err);
-    process.exitCode = 1;
-  } finally {
-    console.log('closing db connection');
-    await db.close();
-    console.log('db connection closed');
+const product = [
+  {
+    firstName: 'Excalibur',
+    imageUrl:
+      'https://www.darksword-armory.com/wp-content/uploads/2014/09/the-excalibur-sword-medieval-weapon-1524.jpg',
+    description: 'Its a sword'
+  },
+  {
+    firstName: 'Murasame',
+    imageUrl:
+      'https://images-na.ssl-images-amazon.com/images/I/51arm224w%2BL._SX425_.jpg',
+    description: 'Its a sword'
+  },
+  {
+    name: 'Master Sword',
+    imageUrl:
+      'https://www.darksword-armory.com/wp-content/uploads/2014/09/the-excalibur-sword-medieval-weapon-1524.jpg',
+    description: 'Its a sword'
+  },
+  {
+    name: 'Ragnell',
+    imageUrl:
+      'https://d2t1xqejof9utc.cloudfront.net/screenshots/pics/34a10962ba762a663a2e5734d217e2e2/large.jpg',
+    description: 'Its a sword'
   }
-}
+];
 
-// Execute the `seed` function, IF we ran this module directly (`node seed`).
-// `Async` functions always return a promise, so we can use `catch` to handle
-// any errors that might occur inside of `seed`.
-if (module === require.main) {
-  runSeed();
-}
+const users = [
+  {
+    firstName: 'Lancelot',
+    lastName: 'du Lac',
+    email: 'lance@roundtable.com',
+    password: 'guineviere1234',
+    salt: 'temp',
+    googleId: null
+  },
+  {
+    firstName: 'Arthur',
+    lastName: 'Pendragon',
+    email: 'excalibur@roundtable.com',
+    password: 'ika1234',
+    salt: 'temp',
+    googleId: null
+  },
+  {
+    firstName: 'Link',
+    lastName: 'Link',
+    email: 'LL@roundtable.com',
+    password: 'Fairy1234',
+    salt: 'temp',
+    googleId: null
+  },
+  {
+    firstName: 'Ike',
+    lastName: 'Ike',
+    email: 'dragonmaster@roundtable.com',
+    password: 'fire1234',
+    salt: 'temp',
+    googleId: null
+  }
+];
 
-// we export the seed function for testing purposes (see `./seed.spec.js`)
-module.exports = seed;
+const seed = async () => {
+  await db.sync({force: true});
+
+  // seed your database here!
+
+  await Promise.all(
+    users.map(id => {
+      return User.create(id);
+    })
+  );
+  console.log(green('Seeding success!'));
+  db.close();
+};
+
+seed().catch(err => {
+  console.error(red('Oh noes! Something went wrong!'));
+  console.error(err);
+  db.close();
+});
