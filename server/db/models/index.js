@@ -10,15 +10,15 @@ const OrderItem = require('./orderItem');
 
 // each user can have more than one payment method
 User.hasMany(CardInfo);
-CardInfo.hasOne(User);
+CardInfo.belongsTo(User);
 
 // each user can have more than one shipping address
 User.hasMany(ShippingAddress);
-ShippingAddress.hasOne(User);
+ShippingAddress.belongsTo(User);
 
 // every user can have more than one order (only one can be pending, but others can be in different states) - should we have a shopping cart as a second model?
 User.hasMany(Order);
-Order.hasOne(User);
+Order.belongsTo(User);
 
 // create associations with the orderItem - for Order table and for Product table
 OrderItem.belongsTo(Product);
