@@ -9,7 +9,7 @@ const OrderItem = require('./orderItem');
  */
 
 // each user can have more than one payment method
-User.hasMany(cardInfo);
+User.hasMany(CardInfo);
 CardInfo.hasOne(User);
 
 // each user can have more than one shipping address

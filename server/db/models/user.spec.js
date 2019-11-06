@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-expressions
-git; /* global describe beforeEach it */
+/* global describe beforeEach it */
 
 const {expect} = require('chai');
 const db = require('../index');
