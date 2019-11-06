@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
-const Order = db.define('orderHistory', {
+const Order = db.define('order', {
   status: {
     type: Sequelize.STRING,
     validate: {
@@ -12,7 +12,7 @@ const Order = db.define('orderHistory', {
     type: Sequelize.STRING
   },
   total: {
-    type: Sequelize.NUMBER
+    type: Sequelize.INTEGER
   }
 });
 
