@@ -12,7 +12,7 @@ export const UserHome = props => {
     <div>
       <h3>
         Welcome,
-        {email}
+        {name}
       </h3>
     </div>
   );
@@ -22,7 +22,8 @@ export const UserHome = props => {
  * CONTAINER
  */
 const mapState = state => ({
-  email: state.user.email
+  email: state.user.email,
+  name: state.user.firstName
 });
 
 export default connect(mapState)(UserHome);
