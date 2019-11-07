@@ -3,13 +3,17 @@ const {User} = require('../db/models/index');
 
 module.exports = router;
 
+// creating a separate file for user's cart routes - redirect to that file if user is trying to get their cart
+// router.use('/users', require('./users'));
+router.use('/:id/cart/', require('./cart'));
+
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll({
       // explicitly select only the id and email fields - even though
       // users' passwords are encrypted, it won't help if we just
       // send everything to anyone who asks!
-      attributes: ['id', 'email']
+      attributes: ['id', 'email', 'firstName', 'lastName']
     });
     res.json(users);
   } catch (err) {
