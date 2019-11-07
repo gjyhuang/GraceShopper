@@ -17,12 +17,14 @@ class Products extends React.Component {
 
   render() {
     console.log('props >>>', this.props);
-    // const products = this.props.products;
+    const products = this.props.products;
     return (
       <div className="products-list-all">
         <h1>Product list</h1>
         <hr />
-        <SingleProduct />
+        {products.map(product => (
+          <SingleProduct key={product.id} {...product} />
+        ))}
       </div>
     );
   }

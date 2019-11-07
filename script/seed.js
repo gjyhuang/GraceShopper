@@ -5,28 +5,28 @@ const {User, Product} = require('../server/db/models/index');
 const products = [
   {
     name: 'Excalibur',
-    price: 5000,
+    price: 500000,
     imageUrl:
       'https://www.darksword-armory.com/wp-content/uploads/2014/09/the-excalibur-sword-medieval-weapon-1524.jpg',
     amountInStock: 1
   },
   {
     name: 'Murasame',
-    price: 3000,
+    price: 300000,
     imageUrl:
       'https://images-na.ssl-images-amazon.com/images/I/51arm224w%2BL._SX425_.jpg',
     amountInStock: 1
   },
   {
     name: 'Master Sword',
-    price: 5000,
+    price: 500000,
     imageUrl:
-      'https://www.darksword-armory.com/wp-content/uploads/2014/09/the-excalibur-sword-medieval-weapon-1524.jpg',
+      'https://images.fun.com/products/61032/1-1/legend-of-zelda-master-sword-light.jpg',
     amountInStock: 1
   },
   {
     name: 'Ragnell',
-    price: 7000,
+    price: 700000,
     imageUrl:
       'https://d2t1xqejof9utc.cloudfront.net/screenshots/pics/34a10962ba762a663a2e5734d217e2e2/large.jpg',
     amountInStock: 1
