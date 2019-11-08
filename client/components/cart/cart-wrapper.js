@@ -12,6 +12,12 @@ import {calcTotal} from '../store/cart';
 
 // if cart empty - load the <cart is empty> component
 export class Cart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleAdd = this.handleAdd.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+  }
+
   componentDidMount() {
     // re-calculate the total
     this.state.calcTotal();
