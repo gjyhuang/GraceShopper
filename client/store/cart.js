@@ -36,15 +36,15 @@ export const calcTotal = () => ({type: CALC_TOTAL});
 /**
  * THUNK CREATORS
  */
-export const addToCartThunkCreator = product => async dispatch => {
-  try {
-    // ajax to create new row in the orderItem tablee
-    // const productToAdd = await axios.post('/api/product')
-    // dispatch added to cart
-  } catch (error) {
-    console.error(error);
-  }
-};
+// export const addToCartThunkCreator = product => async dispatch => {
+//   try {
+//     // ajax to create new row in the orderItem tablee
+//     // const productToAdd = await axios.post('/api/product')
+//     // dispatch added to cart
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 /**
  * REDUCER

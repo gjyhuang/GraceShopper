@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {logout} from '../store';
+// import {Link} from 'react-router-dom';
+// import {logout} from '../store';
 import {addToCart, removeFromCart, calcTotal} from '../../store/cart';
 import {Cart} from '../cart';
 // add import statement for Grace's cart item component and empty cart component!
@@ -19,38 +19,44 @@ export class CartWrapper extends React.Component {
 
   componentDidMount() {
     // re-calculate the total
-    this.state.calcTotal();
+    console.log('props in did mount', this.props);
+    // this.props.calcTotal();
   }
 
   handleAdd(event) {
     // add a copy of the target of the event to the list of items
     event.preventDefault();
-    this.state.addItem(event.target);
-    this.state.calcTotal();
+    this.props.addItem(event.target);
+    this.props.calcTotal();
   }
 
   handleRemove(event) {
     // remove one item of this kind from the array of items in cart
     event.preventDefault();
-    this.state.removeItem(event.target.id);
-    this.state.calcTotal();
+    this.props.removeItem(event.target.id);
+    this.props.calcTotal();
   }
 
   render() {
-    return this.state.itemsInCart ? (
-      <Cart
-        cartItems={this.state.itemsInCart}
-        handleAdd={this.state.addItem}
-        handleRemove={this.state.removeItem}
-      />
+    console.log('props in class component render', this.props);
+    return this.props.itemsInCart.length > 0 ? (
+      <div>
+        <div> this is the cart wrapper component</div>
+        <Cart
+          cartItems={this.props.itemsInCart}
+          handleAdd={this.addItem}
+          handleRemove={this.removeItem}
+        />
+      </div>
     ) : (
-      <EmptyCart />
+      <div>Your cart is empty!</div>
     );
   }
 }
 
 // get the list of items in the cart from the store
 const mapStateToProps = function(state) {
+  console.log('mapping state to props');
   return {
     itemsInCart: state.cart.products,
     total: state.cart.total
@@ -58,6 +64,7 @@ const mapStateToProps = function(state) {
 };
 
 const mapDispatchToProps = function(dispatch) {
+  console.log('mapping dispatch to props');
   return {
     // get the add item function from store
     addItem: product => dispatch(addToCart(product)),
