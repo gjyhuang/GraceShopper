@@ -14,6 +14,7 @@ const ADD_TO_CART = 'ADD_TO_CART';
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 const GOT_CART = 'GOT_CART';
 const CHECKOUT = 'CHECKOUT';
+const CALC_TOTAL = 'CALC_TOTAL';
 
 /**
  * INITIAL STATE
@@ -26,10 +27,11 @@ const defaultCart = {
 /**
  * ACTION CREATORS
  */
-const addToCart = product => ({type: ADD_TO_CART, product});
-const removeFromCart = product => ({type: REMOVE_FROM_CART, product});
-const gotCart = orderId => ({type: GOT_CART, orderId});
-const checkout = () => ({type: CHECKOUT});
+export const addToCart = product => ({type: ADD_TO_CART, product});
+export const removeFromCart = product => ({type: REMOVE_FROM_CART, product});
+export const gotCart = orderId => ({type: GOT_CART, orderId});
+export const checkout = () => ({type: CHECKOUT});
+export const calcTotal = () => ({type: CALC_TOTAL});
 
 /**
  * THUNK CREATORS
@@ -68,6 +70,9 @@ export default function(state = defaultCart, action) {
           }
         })
       };
+    case CALC_TOTAL:
+      // every element in the "products" array has a price - add them up
+      return {...state, total: state.products.reduce(() => {}, state.total)};
     case CHECKOUT:
       // when checkout button is clicked (TIER 1), clear the cart and the total
       return defaultCart;
