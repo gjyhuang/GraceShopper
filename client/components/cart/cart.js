@@ -4,11 +4,16 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../../store';
 
-const Cart = props => (
-  <table className="shopping-cart">
-    <h1>Your shopping cart</h1>
-    <tr className="cart-item" />
-  </table>
-);
+const Cart = props => {
+  console.log('props >>>>>> ', props);
+  return (
+    <div id="cart-page">
+      <h1>Your shopping cart</h1>
+      <table id="cart">
+        <tr className="cart-item" />
+      </table>
+    </div>
+  );
+};
 
 export default Cart;

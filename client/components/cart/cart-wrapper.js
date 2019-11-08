@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../store';
-import {addToCart} from '../store/cart';
-import {removeFromCart} from '../store/cart';
-import {calcTotal} from '../store/cart';
+import {addToCart, removeFromCart, calcTotal} from '../../store/cart';
+import {Cart} from '../cart';
 // add import statement for Grace's cart item component and empty cart component!
 // import {CartItems} from './cart/cartItem';
 // import {EmptyCart} from './cart/emptyCart';
 
 // if cart empty - load the <cart is empty> component
-export class Cart extends React.Component {
+export class CartWrapper extends React.Component {
   constructor(props) {
     super(props);
     this.handleAdd = this.handleAdd.bind(this);
@@ -38,8 +37,8 @@ export class Cart extends React.Component {
   }
 
   render() {
-    return state.itemsInCart ? (
-      <CartItems
+    return this.state.itemsInCart ? (
+      <Cart
         cartItems={this.state.itemsInCart}
         handleAdd={this.state.addItem}
         handleRemove={this.state.removeItem}
@@ -61,13 +60,15 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     // get the add item function from store
-    addItem: dispatch(addToCart(product)),
+    addItem: product => dispatch(addToCart(product)),
     // get the remove item function
-    removeItem: dispatch(removeFromCart(product)),
-    calcTotal: dispatch(calcTotal())
+    removeItem: product => dispatch(removeFromCart(product)),
+    calcTotal: () => dispatch(calcTotal())
   };
 };
 
-const ConnectedCart = connect(mapStateToProps, mapDispatchToProps)(Cart);
+const ConnectedCartWrapper = connect(mapStateToProps, mapDispatchToProps)(
+  CartWrapper
+);
 
-export default ConnectedCart;
+export default ConnectedCartWrapper;
