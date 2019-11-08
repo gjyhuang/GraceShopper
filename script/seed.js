@@ -1,6 +1,6 @@
 const db = require('../server/db');
 const {green, red} = require('chalk');
-const {User, Product} = require('../server/db/models/index');
+const {User, Product, Order} = require('../server/db/models/index');
 
 const products = [
   {
@@ -68,6 +68,13 @@ const users = [
   }
 ];
 
+const orders = [
+  {status: 'processing', userId: 1},
+  {status: 'delivered', userId: 1},
+  {status: 'in transit', userId: 2},
+  {status: 'in cart', userId: 4},
+  {status: 'in cart', userId: 4}
+];
 const seed = async () => {
   await db.sync({force: true});
 
@@ -82,6 +89,12 @@ const seed = async () => {
   await Promise.all(
     products.map(product => {
       return Product.create(product);
+    })
+  );
+
+  await Promise.all(
+    orders.map(order => {
+      return Order.create(order);
     })
   );
 

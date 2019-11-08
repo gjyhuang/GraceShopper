@@ -16,7 +16,6 @@ class Products extends React.Component {
   }
 
   render() {
-    console.log('props >>>', this.props);
     const products = this.props.products;
     return (
       <div className="products-list-all">
@@ -31,7 +30,6 @@ class Products extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     products: state.products
   };

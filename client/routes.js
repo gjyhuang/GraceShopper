@@ -50,6 +50,7 @@ const mapState = state => ({
 const mapDispatch = dispatch => ({
   loadInitialData() {
     dispatch(me());
+    // add dispatch of action to grab the cart
   }
 });
 
