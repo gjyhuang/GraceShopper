@@ -12,7 +12,7 @@ export const UserHome = props => {
     <div>
       <h3>
         Welcome,
-        {name}
+        {email}
       </h3>
     </div>
   );
