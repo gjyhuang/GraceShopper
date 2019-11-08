@@ -10,8 +10,8 @@ import history from '../history';
 /**
  * ACTION TYPES
  */
-const ADDED_TO_CART = 'ADDED_TO_CART';
-const REMOVED_FROM_CART = 'REMOVED_FROM_CART';
+const ADD_TO_CART = 'ADD_TO_CART';
+const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 const GOT_CART = 'GOT_CART';
 const CHECKOUT = 'CHECKOUT';
 
@@ -26,8 +26,8 @@ const defaultCart = {
 /**
  * ACTION CREATORS
  */
-const addedToCart = product => ({type: ADDED_TO_CART, product});
-const removedFromCart = product => ({type: REMOVED_FROM_CART, product});
+const addToCart = product => ({type: ADD_TO_CART, product});
+const removeFromCart = product => ({type: REMOVE_FROM_CART, product});
 const gotCart = orderId => ({type: GOT_CART, orderId});
 const checkout = () => ({type: CHECKOUT});
 
@@ -50,7 +50,7 @@ export const addToCartThunkCreator = product => async dispatch => {
 
 export default function(state = defaultCart, action) {
   switch (action.type) {
-    case ADDED_TO_CART:
+    case ADD_TO_CART:
       // when add to cart button clicked, update cart prop on state to include this new item
       // also needs to take care of the price - find the new item's price and add it to the current total
       return {
@@ -58,7 +58,7 @@ export default function(state = defaultCart, action) {
         products: [...state.products, action.product],
         total: state.total + action.product.price
       };
-    case REMOVED_FROM_CART:
+    case REMOVE_FROM_CART:
       // find the removed product via product id and return the cart without it
       return {
         ...state,
