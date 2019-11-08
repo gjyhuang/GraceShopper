@@ -19,8 +19,7 @@ export class CartWrapper extends React.Component {
 
   componentDidMount() {
     // re-calculate the total
-    console.log('props in did mount', this.props);
-    // this.props.calcTotal();
+    this.props.calcTotal();
   }
 
   handleAdd(event) {

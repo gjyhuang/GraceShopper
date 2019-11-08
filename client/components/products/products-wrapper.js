@@ -6,22 +6,18 @@ import {logout} from '../../store';
 import SingleProduct from './single-product';
 import {getAllProductsThunk} from '../../store/products';
 
-class AddToCart extends React.Component {
+class ProductsWrapper extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      cartQuantity: 0
-    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleSubmit(event) {
+    console.log(event);
     event.preventDefault();
-  }
-
-  handleChange(event) {
-    this.setState({[event.target.name]: event.target.value});
+    console.log('pressing button!', event.target.name);
+    // this.state.cart.products.push();
   }
 
   componentDidMount() {
@@ -29,14 +25,17 @@ class AddToCart extends React.Component {
   }
 
   render() {
-    console.log('props >>>', this.props);
     const products = this.props.products;
     return (
       <div className="products-list-all">
         <h1>Product list</h1>
         <hr />
         {products.map(product => (
-          <SingleProduct key={product.id} {...product} />
+          <SingleProduct
+            key={product.id}
+            {...product}
+            handleSubmit={this.handleSubmit}
+          />
         ))}
       </div>
     );
@@ -49,4 +48,4 @@ const mapDispatch = dispatch => {
   };
 };
 
-export default connect(null, mapDispatch)(AddToCart);
+export default connect(null, mapDispatch)(ProductsWrapper);
