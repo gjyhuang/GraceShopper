@@ -68,6 +68,8 @@ export default function(state = defaultCart, action) {
     case ADD_TO_CART:
       // when add to cart button clicked, update cart prop on state to include this new item
       // also needs to take care of the price - find the new item's price and add it to the current total
+      console.log('cart addtocart firing', action);
+      console.log(action.product);
       return {
         ...state,
         products: [...state.products, action.product],

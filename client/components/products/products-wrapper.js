@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../../store';
 import SingleProduct from './single-product';
-import {getAllProductsThunk} from '../../store/products';
+import {getAllProductsThunk, addToCartThunk} from '../../store/products';
 
 class ProductsWrapper extends React.Component {
   constructor(props) {
@@ -14,10 +14,12 @@ class ProductsWrapper extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(event);
     event.preventDefault();
-    console.log('pressing button!', event.target.name);
-    // this.state.cart.products.push();
+    const productId = Number(event.target.name);
+    const productToAdd = this.props.products.find(
+      item => item.id === productId
+    );
+    this.props.addToCart(productToAdd);
   }
 
   componentDidMount() {
@@ -44,7 +46,8 @@ class ProductsWrapper extends React.Component {
 
 const mapDispatch = dispatch => {
   return {
-    getAllProducts: () => dispatch(getAllProductsThunk())
+    getAllProducts: () => dispatch(getAllProductsThunk()),
+    addToCart: product => dispatch(addToCartThunk(product))
   };
 };
 
