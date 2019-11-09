@@ -16,14 +16,12 @@ class Products extends React.Component {
   }
 
   render() {
-    console.log('props >>>', this.props);
     const products = this.props.products;
     return <ProductsWrapper products={products} />;
   }
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     products: state.products,
     cart: state.cart

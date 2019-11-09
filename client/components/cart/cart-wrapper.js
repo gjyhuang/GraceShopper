@@ -37,7 +37,6 @@ export class CartWrapper extends React.Component {
   }
 
   render() {
-    console.log('props in class component render', this.props);
     return this.props.itemsInCart.length > 0 ? (
       <div>
         <div> this is the cart wrapper component</div>
@@ -55,7 +54,6 @@ export class CartWrapper extends React.Component {
 
 // get the list of items in the cart from the store
 const mapStateToProps = function(state) {
-  console.log('mapping state to props');
   return {
     itemsInCart: state.cart.products,
     total: state.cart.total
@@ -63,7 +61,6 @@ const mapStateToProps = function(state) {
 };
 
 const mapDispatchToProps = function(dispatch) {
-  console.log('mapping dispatch to props');
   return {
     // get the add item function from store
     addItem: product => dispatch(addToCart(product)),

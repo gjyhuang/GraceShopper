@@ -12,9 +12,11 @@ import history from '../history';
  */
 const ADD_TO_CART = 'ADD_TO_CART';
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
-const GOT_CART = 'GOT_CART';
 const CHECKOUT = 'CHECKOUT';
 const CALC_TOTAL = 'CALC_TOTAL';
+// for thunk creator, need two actions - one to dispatch when you want to see the cart, the other when you got the cart and want to update state accordingly
+const GET_CART = 'GET_CART';
+const GOT_CART = 'GOT_CART';
 
 /**
  * INITIAL STATE
@@ -29,13 +31,24 @@ const defaultCart = {
  */
 export const addToCart = product => ({type: ADD_TO_CART, product});
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product});
-export const gotCart = orderId => ({type: GOT_CART, orderId});
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
+export const getCart = userId => ({type: GET_CART});
+export const gotCart = orderId => ({type: GOT_CART, orderId});
 
 /**
  * THUNK CREATORS
  */
+
+// export const getCartThunkCreator = (userId) => {
+//   async dispatch => {
+//     try {
+//       const {data} = await axios.get('/')
+//     } catch (error) {
+
+//     }
+//   }
+// }
 // export const addToCartThunkCreator = product => async dispatch => {
 //   try {
 //     // ajax to create new row in the orderItem tablee
