@@ -15,7 +15,6 @@ const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 const CHECKOUT = 'CHECKOUT';
 const CALC_TOTAL = 'CALC_TOTAL';
 // for thunk creator, need two actions - one to dispatch when you want to see the cart, the other when you got the cart and want to update state accordingly
-const GET_CART = 'GET_CART';
 const GOT_CART = 'GOT_CART';
 
 /**
@@ -33,31 +32,72 @@ export const addToCart = product => ({type: ADD_TO_CART, product});
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product});
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
-export const getCart = userId => ({type: GET_CART});
-export const gotCart = orderId => ({type: GOT_CART, orderId});
+export const gotCart = cart => ({type: GOT_CART, cart});
 
 /**
  * THUNK CREATORS
  */
 
-// export const getCartThunkCreator = (userId) => {
-//   async dispatch => {
-//     try {
-//       const {data} = await axios.get('/')
-//     } catch (error) {
+export const getCartIdThunkCreator = userId => async dispatch => {
+  try {
+    // get the user's object
+    const {data} = await axios.get(`/users/${userId}`);
+    // in data of user's object, their orders are eager-loaded in an array.
+    const {orders} = data;
+    const curCart = orders.filter(order => {
+      return order.status === 'in cart';
+    });
+    // if that array is empty, create new cart
+    if (!curCart.id) {
+      // dispatch create cart thunk
+    } else {
+      // else if any of them are in cart, return that order
+      dispatch(getCartContentsThunkCreator(curCart.id));
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-//     }
-//   }
-// }
-// export const addToCartThunkCreator = product => async dispatch => {
-//   try {
-//     // ajax to create new row in the orderItem tablee
-//     // const productToAdd = await axios.post('/api/product')
-//     // dispatch added to cart
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+export const getCartContentsThunkCreator = cartId =>
+  // the contents of a cart will be eager-loaded with the order number from the order table!
+  async dispatch => {
+    try {
+      // get all products that are in the cart - orderItem table
+      const {data} = await axios.get(`api/orders/${cartId}`);
+      dispatch(gotCart(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+export const createCartThunkCreator = userId =>
+  // create new row in orders table, with user id and status "in cart"
+  async dispatch => {
+    try {
+      const {data} = await axios.post('/api/orders/', {
+        userId,
+        status: 'in cart'
+      });
+      dispatch(gotCart(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+export const addToCartThunkCreator = (
+  cartId,
+  productId
+) => async dispatch => async dispatch => {
+  try {
+    // ajax to create new row in the orderItem table
+    const {data} = await axios.post(`/api/orderItems/${cartId}`, {productId});
+    // fetch the cart again
+    dispatch(getCartContentsThunkCreator(cartId));
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 /**
  * REDUCER
