@@ -38,5 +38,6 @@ module.exports = {
   Order,
   Product,
   CardInfo,
-  ShippingAddress
+  ShippingAddress,
+  OrderItem
 };

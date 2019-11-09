@@ -85,19 +85,31 @@ export const createCartThunkCreator = userId =>
     }
   };
 
-export const addToCartThunkCreator = (
-  cartId,
-  productId
-) => async dispatch => async dispatch => {
+export const addToCartThunkCreator = (cartId, productId) => async dispatch => {
   try {
     // ajax to create new row in the orderItem table
-    const {data} = await axios.post(`/api/orderItems/${cartId}`, {productId});
+    await axios.post(`/api/orderItems/${cartId}`, {productId});
     // fetch the cart again
     dispatch(getCartContentsThunkCreator(cartId));
   } catch (error) {
     console.error(error);
   }
 };
+
+export const checkoutThunkCreator = cartId =>
+  // the contents of a cart will be eager-loaded with the order number from the order table!
+  async dispatch => {
+    try {
+      // ajax to change the status of the order
+      await axios.put(`api/orders/${cartId}`, {
+        status: 'processing'
+      });
+      // create new cart immediately and fetch it
+      dispatch(createCartThunkCreator());
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 /**
  * REDUCER

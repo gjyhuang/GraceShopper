@@ -1,6 +1,6 @@
 const db = require('../server/db');
 const {green, red} = require('chalk');
-const {User, Product, Order} = require('../server/db/models/index');
+const {User, Product, Order, OrderItem} = require('../server/db/models/index');
 
 const products = [
   {
@@ -75,6 +75,19 @@ const orders = [
   {status: 'in cart', userId: 4},
   {status: 'in cart', userId: 4}
 ];
+
+const orderItems = [
+  {orderId: 1, productId: 1},
+  {orderId: 1, productId: 2},
+  {orderId: 2, productId: 2},
+  {orderId: 2, productId: 3},
+  {orderId: 3, productId: 3},
+  {orderId: 3, productId: 4},
+  {orderId: 4, productId: 4},
+  {orderId: 4, productId: 1},
+  {orderId: 5, productId: 1},
+  {orderId: 5, productId: 2}
+];
 const seed = async () => {
   await db.sync({force: true});
 
@@ -95,6 +108,12 @@ const seed = async () => {
   await Promise.all(
     orders.map(order => {
       return Order.create(order);
+    })
+  );
+
+  await Promise.all(
+    orderItems.map(orderItem => {
+      return OrderItem.create(orderItem);
     })
   );
 
