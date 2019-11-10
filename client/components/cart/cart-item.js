@@ -22,6 +22,14 @@ const CartItem = props => {
         >
           +
         </button>
+        <button
+          type="submit"
+          name="subtract"
+          id={props.id}
+          onClick={props.handleRemove}
+        >
+          -
+        </button>
       </td>
     </tr>
   );

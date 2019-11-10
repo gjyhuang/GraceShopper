@@ -5,7 +5,6 @@ import {Link} from 'react-router-dom';
 import {logout} from '../../store';
 
 const SingleProduct = props => {
-  // console.log('singleproduct props >>>> ', props)
   const price = props.price.toString();
   return (
     <div>

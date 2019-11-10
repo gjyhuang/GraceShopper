@@ -30,7 +30,10 @@ const defaultCart = {
  * ACTION CREATORS
  */
 export const addToCart = product => ({type: ADD_TO_CART, product});
-export const removeFromCart = product => ({type: REMOVE_FROM_CART, product});
+export const removeFromCart = productId => ({
+  type: REMOVE_FROM_CART,
+  productId
+});
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
 export const getCart = userId => ({type: GET_CART});
@@ -59,16 +62,29 @@ export const gotCart = orderId => ({type: GOT_CART, orderId});
 //   }
 // };
 
-export const addToCartThunk = product => (dispatch, getState) => {
+export const addToCartThunk = productId => (dispatch, getState) => {
   let state = getState();
-  console.log('state!', state);
-  dispatch(addToCart(product));
+  const selectedProduct = state.products.find(
+    product => product.id === Number(productId)
+  );
+  dispatch(addToCart(selectedProduct));
 };
+
+// hold for now
+// export const removeFromCartThunk = productId => (dispatch, getState) => {
+//   let state = getState();
+//   console.log('state!', state.products);
+//   // debugger;
+//   const selectedProduct = state.products.find(product => product.id === Number(productId));
+//   console.log('selectedProduct', selectedProduct)
+//   dispatch(removeFromCart(selectedProduct));
+// };
 
 /**
  * REDUCER
  */
 
+// eslint-disable-next-line complexity
 export default function(state = defaultCart, action) {
   switch (action.type) {
     case ADD_TO_CART: {
@@ -88,23 +104,32 @@ export default function(state = defaultCart, action) {
         }
       return {
         ...state,
-        products: updatedProducts,
-        total: state.total + action.product.price
+        products: updatedProducts
       };
     }
-    case REMOVE_FROM_CART:
+    case REMOVE_FROM_CART: {
       // find the removed product via product id and return the cart without it
+      const updatedProducts = [...state.products];
+      const itemToDecrease = updatedProducts.find(
+        item => item.id === Number(action.productId)
+      );
+      itemToDecrease.quantity--;
+      if (itemToDecrease.quantity === 0) {
+        updatedProducts.splice(updatedProducts.indexOf(itemToDecrease), 1);
+      }
       return {
         ...state,
-        products: state.products.map(product => {
-          if (product.id !== action.product.id) {
-            return product;
-          }
-        })
+        products: updatedProducts
       };
+    }
     case CALC_TOTAL:
       // every element in the "products" array has a price - add them up
-      return {...state, total: state.products.reduce(() => {}, state.total)};
+      return {
+        ...state,
+        total: state.products.reduce((acc, currProd) => {
+          return currProd.price * currProd.quantity + acc;
+        }, 0)
+      };
     case CHECKOUT:
       // when checkout button is clicked (TIER 1), clear the cart and the total
       return defaultCart;

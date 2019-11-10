@@ -3,7 +3,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 // import {Link} from 'react-router-dom';
 // import {logout} from '../store';
-import {addToCart, removeFromCart, calcTotal} from '../../store/cart';
+import {
+  addToCartThunk,
+  removeFromCart,
+  calcTotal,
+  checkout
+} from '../../store/cart';
 import {Cart, EmptyCart} from '../cart';
 
 export class CartWrapper extends React.Component {
@@ -11,6 +16,7 @@ export class CartWrapper extends React.Component {
     super(props);
     this.handleAdd = this.handleAdd.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
+    this.handleCheckout = this.handleCheckout.bind(this);
   }
 
   componentDidMount() {
@@ -20,10 +26,8 @@ export class CartWrapper extends React.Component {
 
   handleAdd(event) {
     // add a copy of the target of the event to the list of items
-    event.preventDefault();
-    console.log('handleAdd target >>>', event.target.id);
     // the end goal is to pass id into a thunk that will use getState to access the product list and send that product info along to the action creator
-
+    event.preventDefault();
     this.props.incrementQuantity(event.target.id);
     this.props.calcTotal();
   }
@@ -31,8 +35,13 @@ export class CartWrapper extends React.Component {
   handleRemove(event) {
     // remove one item of this kind from the array of items in cart
     event.preventDefault();
-    this.props.removeItem(event.target.id);
+    this.props.decreaseQuantity(event.target.id);
     this.props.calcTotal();
+  }
+
+  handleCheckout(event) {
+    event.preventDefault();
+    this.props.checkoutAction();
   }
 
   render() {
@@ -43,6 +52,8 @@ export class CartWrapper extends React.Component {
           cartItems={this.props.itemsInCart}
           handleAdd={this.handleAdd}
           handleRemove={this.handleRemove}
+          handleCheckout={this.handleCheckout}
+          total={this.props.total}
         />
       </div>
     ) : (
@@ -62,10 +73,11 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     // get the add item function from store
-    incrementQuantity: product => dispatch(addToCart(product)),
+    incrementQuantity: productId => dispatch(addToCartThunk(productId)),
     // get the remove item function
-    removeItem: product => dispatch(removeFromCart(product)),
-    calcTotal: () => dispatch(calcTotal())
+    decreaseQuantity: productId => dispatch(removeFromCart(productId)),
+    calcTotal: () => dispatch(calcTotal()),
+    checkoutAction: () => dispatch(checkout())
   };
 };
 
