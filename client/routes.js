@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter, Route, Switch} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {Login, Signup, UserHome, Products, Cart} from './components';
+import {Login, Signup, UserHome} from './components';
+import {Products} from './components/products';
+import {CartWrapper} from './components/cart/';
 import {me} from './store';
 
 /**
@@ -22,7 +24,7 @@ class Routes extends Component {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/products" component={Products} />
-        <Route path="/cart" component={Cart} />
+        <Route path="/cart" component={CartWrapper} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -48,6 +50,7 @@ const mapState = state => ({
 const mapDispatch = dispatch => ({
   loadInitialData() {
     dispatch(me());
+    // add dispatch of action to grab the cart
   }
 });
 

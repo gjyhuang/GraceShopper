@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {User} = require('../db/models/index');
+const {User, Order} = require('../db/models/index');
 
 module.exports = router;
 
@@ -24,7 +24,8 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: ['id', 'firstName', 'lastName', 'email']
+      attributes: ['id', 'firstName', 'lastName', 'email'],
+      include: [{model: Order}]
     });
 
     if (user) {

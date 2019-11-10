@@ -10,10 +10,13 @@ import history from '../history';
 /**
  * ACTION TYPES
  */
-const ADDED_TO_CART = 'ADDED_TO_CART';
-const REMOVED_FROM_CART = 'REMOVED_FROM_CART';
-const GOT_CART = 'GOT_CART';
+const ADD_TO_CART = 'ADD_TO_CART';
+const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 const CHECKOUT = 'CHECKOUT';
+const CALC_TOTAL = 'CALC_TOTAL';
+// for thunk creator, need two actions - one to dispatch when you want to see the cart, the other when you got the cart and want to update state accordingly
+const GET_CART = 'GET_CART';
+const GOT_CART = 'GOT_CART';
 
 /**
  * INITIAL STATE
@@ -26,47 +29,106 @@ const defaultCart = {
 /**
  * ACTION CREATORS
  */
-const addedToCart = product => ({type: ADDED_TO_CART, product});
-const removedFromCart = product => ({type: REMOVED_FROM_CART, product});
-const gotCart = orderId => ({type: GOT_CART, orderId});
-const checkout = () => ({type: CHECKOUT});
+export const addToCart = product => ({type: ADD_TO_CART, product});
+export const removeFromCart = productId => ({
+  type: REMOVE_FROM_CART,
+  productId
+});
+export const checkout = () => ({type: CHECKOUT});
+export const calcTotal = () => ({type: CALC_TOTAL});
+export const getCart = userId => ({type: GET_CART});
+export const gotCart = orderId => ({type: GOT_CART, orderId});
 
 /**
  * THUNK CREATORS
  */
-export const addToCartThunkCreator = product => async dispatch => {
-  try {
-    // ajax to create new row in the orderItem tablee
-    // const productToAdd = await axios.post('/api/product')
-    // dispatch added to cart
-  } catch (error) {
-    console.error(error);
-  }
+
+// export const getCartThunkCreator = (userId) => {
+//   async dispatch => {
+//     try {
+//       const {data} = await axios.get('/')
+//     } catch (error) {
+
+//     }
+//   }
+// }
+// export const addToCartThunkCreator = product => async dispatch => {
+//   try {
+//     // ajax to create new row in the orderItem tablee
+//     // const productToAdd = await axios.post('/api/product')
+//     // dispatch added to cart
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+export const addToCartThunk = productId => (dispatch, getState) => {
+  let state = getState();
+  const selectedProduct = state.products.find(
+    product => product.id === Number(productId)
+  );
+  dispatch(addToCart(selectedProduct));
 };
+
+// hold for now
+// export const removeFromCartThunk = productId => (dispatch, getState) => {
+//   let state = getState();
+//   console.log('state!', state.products);
+//   // debugger;
+//   const selectedProduct = state.products.find(product => product.id === Number(productId));
+//   console.log('selectedProduct', selectedProduct)
+//   dispatch(removeFromCart(selectedProduct));
+// };
 
 /**
  * REDUCER
  */
 
+// eslint-disable-next-line complexity
 export default function(state = defaultCart, action) {
   switch (action.type) {
-    case ADDED_TO_CART:
+    case ADD_TO_CART: {
       // when add to cart button clicked, update cart prop on state to include this new item
       // also needs to take care of the price - find the new item's price and add it to the current total
-      return {
-        ...state,
-        products: [...state.products, action.product],
-        total: state.total + action.product.price
-      };
-    case REMOVED_FROM_CART:
-      // find the removed product via product id and return the cart without it
-      return {
-        ...state,
-        products: state.products.map(product => {
-          if (product.id !== action.product.id) {
-            return product;
+
+      //this code takes care of if the item is already in cart - will increase quantity by 1
+      const updatedProducts = [...state.products];
+      if (!updatedProducts.length) updatedProducts.push(action.product);
+      else
+        for (let i = 0; i < updatedProducts.length; i++) {
+          if (updatedProducts[i].id === action.product.id) {
+            updatedProducts[i].quantity++;
+            break;
           }
-        })
+          updatedProducts.push(action.product);
+        }
+      return {
+        ...state,
+        products: updatedProducts
+      };
+    }
+    case REMOVE_FROM_CART: {
+      // find the removed product via product id and return the cart without it
+      const updatedProducts = [...state.products];
+      const itemToDecrease = updatedProducts.find(
+        item => item.id === Number(action.productId)
+      );
+      itemToDecrease.quantity--;
+      if (itemToDecrease.quantity === 0) {
+        updatedProducts.splice(updatedProducts.indexOf(itemToDecrease), 1);
+      }
+      return {
+        ...state,
+        products: updatedProducts
+      };
+    }
+    case CALC_TOTAL:
+      // every element in the "products" array has a price - add them up
+      return {
+        ...state,
+        total: state.products.reduce((acc, currProd) => {
+          return currProd.price * currProd.quantity + acc;
+        }, 0)
       };
     case CHECKOUT:
       // when checkout button is clicked (TIER 1), clear the cart and the total
