@@ -19,6 +19,7 @@ class ProductsWrapper extends React.Component {
     const productToAdd = this.props.products.find(
       item => item.id === productId
     );
+    productToAdd.quantity = 1;
     this.props.addToCart(productToAdd);
   }
 

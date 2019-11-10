@@ -59,22 +59,39 @@ export const gotCart = orderId => ({type: GOT_CART, orderId});
 //   }
 // };
 
+export const addToCartThunk = product => (dispatch, getState) => {
+  let state = getState();
+  console.log('state!', state);
+  dispatch(addToCart(product));
+};
+
 /**
  * REDUCER
  */
 
 export default function(state = defaultCart, action) {
   switch (action.type) {
-    case ADD_TO_CART:
+    case ADD_TO_CART: {
       // when add to cart button clicked, update cart prop on state to include this new item
       // also needs to take care of the price - find the new item's price and add it to the current total
-      console.log('cart addtocart firing', action);
-      console.log(action.product);
+
+      //this code takes care of if the item is already in cart - will increase quantity by 1
+      const updatedProducts = [...state.products];
+      if (!updatedProducts.length) updatedProducts.push(action.product);
+      else
+        for (let i = 0; i < updatedProducts.length; i++) {
+          if (updatedProducts[i].id === action.product.id) {
+            updatedProducts[i].quantity++;
+            break;
+          }
+          updatedProducts.push(action.product);
+        }
       return {
         ...state,
-        products: [...state.products, action.product],
+        products: updatedProducts,
         total: state.total + action.product.price
       };
+    }
     case REMOVE_FROM_CART:
       // find the removed product via product id and return the cart without it
       return {

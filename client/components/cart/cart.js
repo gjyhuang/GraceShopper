@@ -3,14 +3,23 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../../store';
+import CartItem from './cart-item';
 
 const Cart = props => {
-  console.log('props >>>>>> ', props);
   return (
     <div id="cart-page">
       <h1>Your shopping cart</h1>
       <table id="cart">
-        <tr className="cart-item" />
+        <tbody>
+          {props.cartItems.map(item => (
+            <CartItem
+              key={item.id}
+              {...item}
+              handleAdd={props.handleAdd}
+              handleRemove={props.handleRemove}
+            />
+          ))}
+        </tbody>
       </table>
     </div>
   );

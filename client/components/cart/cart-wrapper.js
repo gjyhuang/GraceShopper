@@ -4,12 +4,8 @@ import {connect} from 'react-redux';
 // import {Link} from 'react-router-dom';
 // import {logout} from '../store';
 import {addToCart, removeFromCart, calcTotal} from '../../store/cart';
-import {Cart} from '../cart';
-// add import statement for Grace's cart item component and empty cart component!
-// import {CartItems} from './cart/cartItem';
-// import {EmptyCart} from './cart/emptyCart';
+import {Cart, EmptyCart} from '../cart';
 
-// if cart empty - load the <cart is empty> component
 export class CartWrapper extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +21,10 @@ export class CartWrapper extends React.Component {
   handleAdd(event) {
     // add a copy of the target of the event to the list of items
     event.preventDefault();
-    this.props.addItem(event.target);
+    console.log('handleAdd target >>>', event.target.id);
+    // the end goal is to pass id into a thunk that will use getState to access the product list and send that product info along to the action creator
+
+    this.props.incrementQuantity(event.target.id);
     this.props.calcTotal();
   }
 
@@ -42,12 +41,12 @@ export class CartWrapper extends React.Component {
         <div> this is the cart wrapper component</div>
         <Cart
           cartItems={this.props.itemsInCart}
-          handleAdd={this.addItem}
-          handleRemove={this.removeItem}
+          handleAdd={this.handleAdd}
+          handleRemove={this.handleRemove}
         />
       </div>
     ) : (
-      <div>Your cart is empty!</div>
+      <EmptyCart />
     );
   }
 }
@@ -63,7 +62,7 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     // get the add item function from store
-    addItem: product => dispatch(addToCart(product)),
+    incrementQuantity: product => dispatch(addToCart(product)),
     // get the remove item function
     removeItem: product => dispatch(removeFromCart(product)),
     calcTotal: () => dispatch(calcTotal())

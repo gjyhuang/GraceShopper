@@ -29,11 +29,6 @@ const getAllProducts = products => ({
 //   type:
 // })
 
-// const addToCart = (product) => ({
-//   type: ADD_TO_CART,
-//   product
-// });
-
 /**
  * THUNK CREATORS
  */
@@ -43,15 +38,12 @@ export const getAllProductsThunk = () => async dispatch => {
     dispatch(getAllProducts(res.data || products));
   } catch (err) {
     console.error(err);
+    //need to change this to handle errors
   }
 };
 
-export const addToCartThunk = product => (dispatch, getState) => {
-  console.log('product in addtocart', product);
-  let state = getState();
-  // debugger;
+export const addToCartThunk = product => dispatch => {
   dispatch(addToCart(product));
-  console.log('state in products reducer', state);
 };
 
 /**
