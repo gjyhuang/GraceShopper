@@ -55,7 +55,7 @@ export class CartWrapper extends React.Component {
 // get the list of items in the cart from the store
 const mapStateToProps = function(state) {
   return {
-    itemsInCart: state.cart.products,
+    itemsInCart: state.cart.orderItems,
     total: state.cart.total
   };
 };

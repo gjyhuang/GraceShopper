@@ -21,15 +21,15 @@ const GOT_CART = 'GOT_CART';
  * INITIAL STATE
  */
 const defaultCart = {
-  products: [],
+  orderItems: [],
   total: 0
 };
 
 /**
  * ACTION CREATORS
  */
-export const addToCart = product => ({type: ADD_TO_CART, product});
-export const removeFromCart = product => ({type: REMOVE_FROM_CART, product});
+export const addToCart = item => ({type: ADD_TO_CART, item});
+export const removeFromCart = item => ({type: REMOVE_FROM_CART, item});
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
 export const gotCart = cart => ({type: GOT_CART, cart});
@@ -50,20 +50,21 @@ export const getCartIdThunkCreator = userId => async dispatch => {
     // if that array is empty, create new cart
     if (!curCart.id) {
       // dispatch create cart thunk
+      dispatch(createCartThunkCreator(userId));
     } else {
       // else if any of them are in cart, return that order
-      dispatch(getCartContentsThunkCreator(curCart.id));
+      dispatch(getCartThunkCreator(curCart.id));
     }
   } catch (error) {
     console.error(error);
   }
 };
 
-export const getCartContentsThunkCreator = cartId =>
+export const getCartThunkCreator = cartId =>
   // the contents of a cart will be eager-loaded with the order number from the order table!
   async dispatch => {
     try {
-      // get all products that are in the cart - orderItem table
+      // get all orderItems that are in the cart - orderItem table
       const {data} = await axios.get(`api/orders/${cartId}`);
       dispatch(gotCart(data));
     } catch (error) {
@@ -88,9 +89,11 @@ export const createCartThunkCreator = userId =>
 export const addToCartThunkCreator = (cartId, productId) => async dispatch => {
   try {
     // ajax to create new row in the orderItem table
-    await axios.post(`/api/orderItems/${cartId}`, {productId});
+    const newOrderItem = await axios.post(`/api/orderItems/${cartId}`, {
+      productId
+    });
     // fetch the cart again
-    dispatch(getCartContentsThunkCreator(cartId));
+    dispatch(addToCart(newOrderItem));
   } catch (error) {
     console.error(error);
   }
@@ -117,30 +120,30 @@ export const checkoutThunkCreator = cartId =>
 
 export default function(state = defaultCart, action) {
   switch (action.type) {
+    case GOT_CART:
+      // when new or existing cart comes back from api, return the cart as a new state (replace whole state!)
+      return action.cart;
     case ADD_TO_CART:
       // when add to cart button clicked, update cart prop on state to include this new item
       // also needs to take care of the price - find the new item's price and add it to the current total
       return {
         ...state,
-        products: [...state.products, action.product],
-        total: state.total + action.product.price
+        orderItems: [...state.orderItems, action.item],
+        total: state.total + action.item.price
       };
     case REMOVE_FROM_CART:
       // find the removed product via product id and return the cart without it
       return {
         ...state,
-        products: state.products.map(product => {
+        orderItems: state.orderItems.map(product => {
           if (product.id !== action.product.id) {
             return product;
           }
         })
       };
     case CALC_TOTAL:
-      // every element in the "products" array has a price - add them up
-      return {...state, total: state.products.reduce(() => {}, state.total)};
-    case CHECKOUT:
-      // when checkout button is clicked (TIER 1), clear the cart and the total
-      return defaultCart;
+      // every element in the "orderItems" array has a price - add them up
+      return {...state, total: state.orderItems.reduce(() => {}, state.total)};
     default:
       return state;
   }
