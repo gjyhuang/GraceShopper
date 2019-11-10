@@ -11,11 +11,12 @@ router.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
 // route for getting order contents
 router.get('/:id', async (req, res, next) => {
   try {
     // get the order specified in slug
-    const order = await Order.findById(req.params.id, {
+    const order = await Order.findByPk(req.params.id, {
       // eager loading order lines from order items table
       include: [{model: OrderItem}]
     });
@@ -35,13 +36,13 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id/', async (req, res, next) => {
   try {
     const [numRows, updatedInstance] = await Order.update(req.body, {
       where: {id: req.params.id},
       returning: true
     });
-    res.json(updatedInstance);
+    res.json(updatedInstance[0]);
   } catch (error) {
     next(error);
   }

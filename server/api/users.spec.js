@@ -16,8 +16,7 @@ describe('User routes', () => {
     beforeEach(() =>
       User.create({
         email: lancelotEmail
-      })
-    );
+      }));
 
     it('GET /api/users', async () => {
       const res = await request(app)

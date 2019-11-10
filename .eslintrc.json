@@ -1,7 +1,13 @@
 {
   "root": true,
-  "extends": ["fullstack", "prettier"],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended", "fullstack"],
+  "parser": "babel-eslint",
   "rules": {
-    "semi": [1, "always"]
+    "react/prop-types": 0
   }
 }

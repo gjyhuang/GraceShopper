@@ -86,14 +86,33 @@ export const createCartThunkCreator = userId =>
     }
   };
 
+export const updateCartTotalThunkCreator = cartId => async dispatch => {
+  try {
+    // get the whole cart
+    const cart = await axios.get(`api/orders/${cartId}`);
+    // reduce the prices of all contents
+    const total = cart.orderItems.reduce((accum, currentItem) => {
+      return accum + currentItem.price;
+    }, 0);
+    // go to the cart's api page and reduce the total
+    axios.put(`api/orders/${cartId}`, {
+      total
+    });
+    console.log('total after reduce from store/cart.js(119)', total);
+    dispatch(calcTotal());
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const addToCartThunkCreator = (cartId, productId) => async dispatch => {
   try {
     // ajax to create new row in the orderItem table
     const newOrderItem = await axios.post(`/api/orderItems/${cartId}`, {
       productId
     });
-    // fetch the cart again
     dispatch(addToCart(newOrderItem));
+    dispatch(updateCartTotalThunkCreator(cartId));
   } catch (error) {
     console.error(error);
   }
@@ -128,8 +147,7 @@ export default function(state = defaultCart, action) {
       // also needs to take care of the price - find the new item's price and add it to the current total
       return {
         ...state,
-        orderItems: [...state.orderItems, action.item],
-        total: state.total + action.item.price
+        orderItems: [...state.orderItems, action.item]
       };
     case REMOVE_FROM_CART:
       // find the removed product via product id and return the cart without it
