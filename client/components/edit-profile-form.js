@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 const EditProfile = props => {
   return (
     <div id="container">
-      <div className="edit-profile" />\
+      <div className="edit-profile" />
       <form>
         <label htmlFor="firstname">First Name:</label>
         <input id="firstname" placeholder={props.firstName} />
@@ -23,7 +23,13 @@ const EditProfile = props => {
   );
 };
 
-const mapStateToProps = props => {
+const mapDispatchToProps = dispatch => {
+  return {
+    update: () => dispatch({type: 'UPDATE-PROFILE'})
+  };
+};
+
+const mapStateToProps = state => {
   return {
     firstName: state.firstName,
     lastName: state.lastName,
@@ -31,4 +37,4 @@ const mapStateToProps = props => {
   };
 };
 
-export default connect(mapStateToProps)(EditProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
