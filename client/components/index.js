@@ -3,8 +3,18 @@
  * This way, we can import all of our components from the same place, rather than
  * having to figure out which file they belong to!
  */
+// NAVBAR
 export {default as Navbar} from './navbar';
+
+// USER
 export {default as UserHome} from './user-home';
+export {default as EditProfile} from './edit-profile-form';
+
+// LOGIN / SIGNUP
 export {Login, Signup} from './auth-form';
 
-export {default as Cart} from './cart/cart';
+// PRODUCTS
+export {Products, SingleProduct, ProductsWrapper} from './products';
+
+// CART
+export {Cart, CartItem, CartWrapper, EmptyCart} from './cart';
