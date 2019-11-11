@@ -14,6 +14,7 @@ const ADD_TO_CART = 'ADD_TO_CART';
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 const CHECKOUT = 'CHECKOUT';
 const CALC_TOTAL = 'CALC_TOTAL';
+const EMPTY_CART = 'EMPTY_CART';
 // for thunk creator, need two actions - one to dispatch when you want to see the cart, the other when you got the cart and want to update state accordingly
 const GET_CART = 'GET_CART';
 const GOT_CART = 'GOT_CART';
@@ -36,6 +37,7 @@ export const removeFromCart = productId => ({
 });
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
+export const emptyCart = () => ({type: EMPTY_CART});
 export const getCart = userId => ({type: GET_CART});
 export const gotCart = orderId => ({type: GOT_CART, orderId});
 
@@ -64,7 +66,7 @@ export const gotCart = orderId => ({type: GOT_CART, orderId});
 
 export const addToCartThunk = productId => (dispatch, getState) => {
   let state = getState();
-  const selectedProduct = state.products.find(
+  const selectedProduct = state.cart.products.find(
     product => product.id === Number(productId)
   );
   dispatch(addToCart(selectedProduct));
@@ -93,7 +95,6 @@ export default function(state = defaultCart, action) {
 
       //this code takes care of if the item is already in cart - will increase quantity by 1
       const updatedProducts = [...state.products];
-      // debugger;
       if (!updatedProducts.length) updatedProducts.push(action.product);
       else {
         const productToAdd = updatedProducts.find(
@@ -130,6 +131,8 @@ export default function(state = defaultCart, action) {
           return currProd.price * currProd.quantity + acc;
         }, 0)
       };
+    case EMPTY_CART:
+      return defaultCart;
     case CHECKOUT:
       // when checkout button is clicked (TIER 1), clear the cart and the total
       return defaultCart;
