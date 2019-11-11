@@ -96,15 +96,6 @@ export default function(state = defaultCart, action) {
       // debugger;
       if (!updatedProducts.length) updatedProducts.push(action.product);
       else {
-        // else
-        // for (let i = 0; i < updatedProducts.length; i++) {
-        //   if (updatedProducts[i].id === action.product.id) {
-        //     updatedProducts[i].quantity++;
-        //     break;
-        //   }
-        //   updatedProducts.push(action.product);
-        //   break;
-        // }
         const productToAdd = updatedProducts.find(
           item => item.id === action.product.id
         );
