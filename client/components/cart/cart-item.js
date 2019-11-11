@@ -5,10 +5,13 @@ import {Link} from 'react-router-dom';
 import {logout} from '../../store';
 
 const CartItem = props => {
+  const price = props.price.toString();
   return (
     <tr className="cart-item">
       <td>{props.name}</td>
-      <td>${props.price}</td>
+      <td>
+        ${price.slice(0, price.length - 2)}.{price.slice(price.length - 2)}
+      </td>
       <td>
         <img src={props.imageUrl} height="60px" />
       </td>
