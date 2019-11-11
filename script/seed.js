@@ -118,11 +118,12 @@ const seed = async () => {
   );
 
   console.log(green('Seeding success!'));
+
   db.close();
 };
 
 seed().catch(err => {
-  console.error(red('Oh noes! Something went wrong!'));
+  console.error('Oh noes! Something went wrong!');
   console.error(err);
   db.close();
 });

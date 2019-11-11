@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../../store';
-import SingleProduct from './single-product';
+import ProductsWrapper from './products-wrapper';
 import {getAllProductsThunk} from '../../store/products';
 
 class Products extends React.Component {
@@ -17,21 +17,14 @@ class Products extends React.Component {
 
   render() {
     const products = this.props.products;
-    return (
-      <div className="products-list-all">
-        <h1>Product list</h1>
-        <hr />
-        {products.map(product => (
-          <SingleProduct key={product.id} {...product} />
-        ))}
-      </div>
-    );
+    return <ProductsWrapper products={products} />;
   }
 }
 
 const mapStateToProps = state => {
   return {
-    products: state.products
+    products: state.products,
+    cart: state.cart
   };
 };
 

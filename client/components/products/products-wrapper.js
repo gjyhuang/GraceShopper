@@ -4,24 +4,23 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../../store';
 import SingleProduct from './single-product';
-import {getAllProductsThunk} from '../../store/products';
+import {getAllProductsThunk, addToCartThunk} from '../../store/products';
 
-class AddToCart extends React.Component {
+class ProductsWrapper extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      cartQuantity: 0
-    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-  }
-
-  handleChange(event) {
-    this.setState({[event.target.name]: event.target.value});
+    const productId = Number(event.target.name);
+    const productToAdd = this.props.products.find(
+      item => item.id === productId
+    );
+    productToAdd.quantity = 1;
+    this.props.addToCart(productToAdd);
   }
 
   componentDidMount() {
@@ -29,14 +28,17 @@ class AddToCart extends React.Component {
   }
 
   render() {
-    console.log('props >>>', this.props);
     const products = this.props.products;
     return (
       <div className="products-list-all">
         <h1>Product list</h1>
         <hr />
         {products.map(product => (
-          <SingleProduct key={product.id} {...product} />
+          <SingleProduct
+            key={product.id}
+            {...product}
+            handleSubmit={this.handleSubmit}
+          />
         ))}
       </div>
     );
@@ -45,8 +47,9 @@ class AddToCart extends React.Component {
 
 const mapDispatch = dispatch => {
   return {
-    getAllProducts: () => dispatch(getAllProductsThunk())
+    getAllProducts: () => dispatch(getAllProductsThunk()),
+    addToCart: product => dispatch(addToCartThunk(product))
   };
 };
 
-export default connect(null, mapDispatch)(AddToCart);
+export default connect(null, mapDispatch)(ProductsWrapper);

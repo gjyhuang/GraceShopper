@@ -30,6 +30,7 @@ const defaultCart = {
  */
 export const addToCart = item => ({type: ADD_TO_CART, item});
 export const removeFromCart = item => ({type: REMOVE_FROM_CART, item});
+
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
 export const gotCart = cart => ({type: GOT_CART, cart});
@@ -133,35 +134,83 @@ export const checkoutThunkCreator = cartId =>
     }
   };
 
+export const addToCartThunk = productId => (dispatch, getState) => {
+  let state = getState();
+  const selectedProduct = state.products.find(
+    product => product.id === Number(productId)
+  );
+  dispatch(addToCart(selectedProduct));
+};
+
+// hold for now
+// export const removeFromCartThunk = productId => (dispatch, getState) => {
+//   let state = getState();
+//   console.log('state!', state.products);
+//   // debugger;
+//   const selectedProduct = state.products.find(product => product.id === Number(productId));
+//   console.log('selectedProduct', selectedProduct)
+//   dispatch(removeFromCart(selectedProduct));
+// };
+
 /**
  * REDUCER
  */
 
+// eslint-disable-next-line complexity
 export default function(state = defaultCart, action) {
   switch (action.type) {
     case GOT_CART:
       // when new or existing cart comes back from api, return the cart as a new state (replace whole state!)
       return action.cart;
-    case ADD_TO_CART:
+    case ADD_TO_CART: {
       // when add to cart button clicked, update cart prop on state to include this new item
       // also needs to take care of the price - find the new item's price and add it to the current total
-      return {
-        ...state,
-        orderItems: [...state.orderItems, action.item]
-      };
-    case REMOVE_FROM_CART:
-      // find the removed product via product id and return the cart without it
-      return {
-        ...state,
-        orderItems: state.orderItems.map(product => {
-          if (product.id !== action.product.id) {
-            return product;
+
+      //this code takes care of if the item is already in cart - will increase quantity by 1
+      const updatedProducts = [...state.products];
+      if (!updatedProducts.length) {
+        updatedProducts.push(action.product);
+      } else {
+        // eslint-disable-next-line nonblock-statement-body-position
+        for (let i = 0; i < updatedProducts.length; i++) {
+          if (updatedProducts[i].id === action.product.id) {
+            updatedProducts[i].quantity++;
+            break;
           }
-        })
+          updatedProducts.push(action.product);
+        }
+      }
+      return {
+        ...state,
+        orderItems: updatedProducts
       };
+    }
+    case REMOVE_FROM_CART: {
+      // find the removed product via product id and return the cart without it
+      const updatedProducts = [...state.products];
+      const itemToDecrease = updatedProducts.find(
+        item => item.id === Number(action.productId)
+      );
+      itemToDecrease.quantity--;
+      if (itemToDecrease.quantity === 0) {
+        updatedProducts.splice(updatedProducts.indexOf(itemToDecrease), 1);
+      }
+      return {
+        ...state,
+        orderItems: updatedProducts
+      };
+    }
     case CALC_TOTAL:
-      // every element in the "orderItems" array has a price - add them up
-      return {...state, total: state.orderItems.reduce(() => {}, state.total)};
+      // every element in the "products" array has a price - add them up
+      return {
+        ...state,
+        total: state.orderItems.reduce((acc, currProd) => {
+          return currProd.price * currProd.quantity + acc;
+        }, 0)
+      };
+    case CHECKOUT:
+      // when checkout button is clicked (TIER 1), clear the cart and the total
+      return defaultCart;
     default:
       return state;
   }
