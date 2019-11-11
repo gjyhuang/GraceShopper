@@ -1,12 +1,6 @@
 import axios from 'axios';
 import history from '../history';
 
-/* EV: functionalities that should be brought in here:
-1. add an item to the cart
-2. remove an item from the cart
-3. see my cart (this is going to be tied to the nav bar - you click a button that says "my cart")
-4. submit my cart (i.e. make purchase) - includes decrementing our stock */
-
 /**
  * ACTION TYPES
  */
@@ -147,7 +141,7 @@ export const checkoutThunkCreator = cartId =>
 
 export const addToCartThunk = productId => (dispatch, getState) => {
   let state = getState();
-  const selectedProduct = state.products.find(
+  const selectedProduct = state.orderItems.find(
     product => product.id === Number(productId)
   );
   dispatch(addToCart(selectedProduct));
@@ -156,9 +150,9 @@ export const addToCartThunk = productId => (dispatch, getState) => {
 // hold for now
 // export const removeFromCartThunk = productId => (dispatch, getState) => {
 //   let state = getState();
-//   console.log('state!', state.products);
+//   console.log('state!', state.orderItems);
 //   // debugger;
-//   const selectedProduct = state.products.find(product => product.id === Number(productId));
+//   const selectedProduct = state.orderItems.find(product => product.id === Number(productId));
 //   console.log('selectedProduct', selectedProduct)
 //   dispatch(removeFromCart(selectedProduct));
 // };
@@ -178,7 +172,7 @@ export default function(state = defaultCart, action) {
       // also needs to take care of the price - find the new item's price and add it to the current total
 
       //this code takes care of if the item is already in cart - will increase quantity by 1
-      const updatedProducts = [...state.products];
+      const updatedProducts = [...state.orderItems];
       if (!updatedProducts.length) {
         updatedProducts.push(action.product);
       } else {
@@ -198,7 +192,7 @@ export default function(state = defaultCart, action) {
     }
     case REMOVE_FROM_CART: {
       // find the removed product via product id and return the cart without it
-      const updatedProducts = [...state.products];
+      const updatedProducts = [...state.orderItems];
       const itemToDecrease = updatedProducts.find(
         item => item.id === Number(action.productId)
       );
