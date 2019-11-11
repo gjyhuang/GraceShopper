@@ -173,9 +173,9 @@ export default function(state = defaultCart, action) {
 
       //this code takes care of if the item is already in cart - will increase quantity by 1
       const updatedProducts = [...state.orderItems];
-      if (!updatedProducts.length) {
-        updatedProducts.push(action.product);
-      } else {
+      console.log(updatedProducts);
+      if (!updatedProducts.length) updatedProducts.push(action.product);
+      else {
         const productToAdd = updatedProducts.find(
           item => item.id === action.product.id
         );

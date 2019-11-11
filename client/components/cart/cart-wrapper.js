@@ -41,8 +41,8 @@ export class CartWrapper extends React.Component {
     event.preventDefault();
     this.props.checkoutAction();
   }
-
   render() {
+    console.log(this.props, '<<<<< props in cart-wrapper component');
     return this.props.itemsInCart.length > 0 ? (
       <div>
         <div> this is the cart wrapper component</div>

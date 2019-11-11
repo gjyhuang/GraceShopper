@@ -5,7 +5,7 @@
     "es6": true,
     "node": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended", "fullstack"],
+  "extends": ["eslint:recommended", "fullstack", "prettier"],
   "parser": "babel-eslint",
   "rules": {
     "react/prop-types": 0

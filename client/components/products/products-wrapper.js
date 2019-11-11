@@ -15,6 +15,7 @@ class ProductsWrapper extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    console.log(event.target);
     const productId = Number(event.target.name);
     const productToAdd = this.props.products.find(
       item => item.id === productId
