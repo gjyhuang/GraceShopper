@@ -1,6 +1,12 @@
 import axios from 'axios';
 import history from '../history';
 
+/* EV: functionalities that should be brought in here:
+1. add an item to the cart
+2. remove an item from the cart
+3. see my cart (this is going to be tied to the nav bar - you click a button that says "my cart")
+4. submit my cart (i.e. make purchase) - includes decrementing our stock */
+
 /**
  * ACTION TYPES
  */
@@ -9,139 +15,56 @@ const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 const CHECKOUT = 'CHECKOUT';
 const CALC_TOTAL = 'CALC_TOTAL';
 // for thunk creator, need two actions - one to dispatch when you want to see the cart, the other when you got the cart and want to update state accordingly
+const GET_CART = 'GET_CART';
 const GOT_CART = 'GOT_CART';
 
 /**
  * INITIAL STATE
  */
 const defaultCart = {
-  orderItems: [],
+  products: [],
   total: 0
 };
 
 /**
  * ACTION CREATORS
  */
-export const addToCart = item => ({type: ADD_TO_CART, item});
-export const removeFromCart = item => ({type: REMOVE_FROM_CART, item});
-
+export const addToCart = product => ({type: ADD_TO_CART, product});
+export const removeFromCart = productId => ({
+  type: REMOVE_FROM_CART,
+  productId
+});
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
-export const gotCart = cart => ({type: GOT_CART, cart});
+export const getCart = userId => ({type: GET_CART});
+export const gotCart = orderId => ({type: GOT_CART, orderId});
 
 /**
  * THUNK CREATORS
  */
 
-export const createCartThunkCreator = userId =>
-  // create new row in orders table, with user id and status "in cart"
-  async dispatch => {
-    try {
-      const {data} = await axios.post('/api/orders/', {
-        userId,
-        status: 'in cart'
-      });
-      dispatch(gotCart(data));
-    } catch (error) {
-      console.error(error);
-    }
-  };
+// export const getCartThunkCreator = (userId) => {
+//   async dispatch => {
+//     try {
+//       const {data} = await axios.get('/')
+//     } catch (error) {
 
-export const getCartThunkCreator = cartId =>
-  // the contents of a cart will be eager-loaded with the order number from the order table!
-  async dispatch => {
-    try {
-      // get all orderItems that are in the cart - orderItem table
-      const {data} = await axios.get(`api/orders/${cartId}`);
-      dispatch(gotCart(data));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-export const getCartIdThunkCreator = userId => async dispatch => {
-  try {
-    // get the user's object
-    const {data} = await axios.get(`/users/${userId}`);
-    // in data of user's object, their orders are eager-loaded in an array.
-    const {orders} = data;
-    const curCart = orders.filter(order => {
-      return order.status === 'in cart';
-    });
-    // if that array is empty, create new cart
-    if (!curCart.id) {
-      // dispatch create cart thunk
-      dispatch(createCartThunkCreator(userId));
-    } else {
-      // else if any of them are in cart, return that order
-      dispatch(getCartThunkCreator(curCart.id));
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateCartTotalThunkCreator = cartId => async dispatch => {
-  try {
-    // get the whole cart
-    const cart = await axios.get(`api/orders/${cartId}`);
-    // reduce the prices of all contents
-    const total = cart.orderItems.reduce((accum, currentItem) => {
-      return accum + currentItem.price;
-    }, 0);
-    // go to the cart's api page and reduce the total
-    axios.put(`api/orders/${cartId}`, {
-      total
-    });
-    console.log('total after reduce from store/cart.js(119)', total);
-    dispatch(calcTotal());
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const removeFromCartThunkCreator = itemId => async dispatch => {
-  try {
-    // ajax to delete the given row
-    await axios.delete('/api/orderItems/', itemId);
-    dispatch(updateCartTotalThunkCreator());
-    dispatch(removeFromCart());
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const addToCartThunkCreator = (cartId, productId) => async dispatch => {
-  try {
-    // ajax to create new row in the orderItem table
-    const newOrderItem = await axios.post(`/api/orderItems/${cartId}`, {
-      productId
-    });
-    dispatch(addToCart(newOrderItem));
-    dispatch(updateCartTotalThunkCreator(cartId));
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const checkoutThunkCreator = cartId =>
-  // the contents of a cart will be eager-loaded with the order number from the order table!
-  async dispatch => {
-    try {
-      // ajax to change the status of the order
-      await axios.put(`api/orders/${cartId}`, {
-        status: 'processing'
-      });
-      // create new cart immediately and fetch it
-      dispatch(createCartThunkCreator());
-    } catch (error) {
-      console.error(error);
-    }
-  };
+//     }
+//   }
+// }
+// export const addToCartThunkCreator = product => async dispatch => {
+//   try {
+//     // ajax to create new row in the orderItem tablee
+//     // const productToAdd = await axios.post('/api/product')
+//     // dispatch added to cart
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 export const addToCartThunk = productId => (dispatch, getState) => {
   let state = getState();
-  const selectedProduct = state.orderItems.find(
+  const selectedProduct = state.cart.products.find(
     product => product.id === Number(productId)
   );
   dispatch(addToCart(selectedProduct));
@@ -150,9 +73,9 @@ export const addToCartThunk = productId => (dispatch, getState) => {
 // hold for now
 // export const removeFromCartThunk = productId => (dispatch, getState) => {
 //   let state = getState();
-//   console.log('state!', state.orderItems);
+//   console.log('state!', state.products);
 //   // debugger;
-//   const selectedProduct = state.orderItems.find(product => product.id === Number(productId));
+//   const selectedProduct = state.products.find(product => product.id === Number(productId));
 //   console.log('selectedProduct', selectedProduct)
 //   dispatch(removeFromCart(selectedProduct));
 // };
@@ -164,16 +87,12 @@ export const addToCartThunk = productId => (dispatch, getState) => {
 // eslint-disable-next-line complexity
 export default function(state = defaultCart, action) {
   switch (action.type) {
-    case GOT_CART:
-      // when new or existing cart comes back from api, return the cart as a new state (replace whole state!)
-      return action.cart;
     case ADD_TO_CART: {
       // when add to cart button clicked, update cart prop on state to include this new item
       // also needs to take care of the price - find the new item's price and add it to the current total
 
       //this code takes care of if the item is already in cart - will increase quantity by 1
-      const updatedProducts = [...state.orderItems];
-      console.log(updatedProducts);
+      const updatedProducts = [...state.products];
       if (!updatedProducts.length) updatedProducts.push(action.product);
       else {
         const productToAdd = updatedProducts.find(
@@ -184,12 +103,12 @@ export default function(state = defaultCart, action) {
       }
       return {
         ...state,
-        orderItems: updatedProducts
+        products: updatedProducts
       };
     }
     case REMOVE_FROM_CART: {
       // find the removed product via product id and return the cart without it
-      const updatedProducts = [...state.orderItems];
+      const updatedProducts = [...state.products];
       const itemToDecrease = updatedProducts.find(
         item => item.id === Number(action.productId)
       );
@@ -199,14 +118,14 @@ export default function(state = defaultCart, action) {
       }
       return {
         ...state,
-        orderItems: updatedProducts
+        products: updatedProducts
       };
     }
     case CALC_TOTAL:
       // every element in the "products" array has a price - add them up
       return {
         ...state,
-        total: state.orderItems.reduce((acc, currProd) => {
+        total: state.products.reduce((acc, currProd) => {
           return currProd.price * currProd.quantity + acc;
         }, 0)
       };
