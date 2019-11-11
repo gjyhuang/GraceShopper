@@ -18,3 +18,7 @@ export const saveLocalCart = cart => {
     console.error(err);
   }
 };
+
+export const clearCart = () => {
+  localStorage.removeItem('cart');
+};
