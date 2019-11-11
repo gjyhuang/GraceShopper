@@ -176,14 +176,11 @@ export default function(state = defaultCart, action) {
       if (!updatedProducts.length) {
         updatedProducts.push(action.product);
       } else {
-        // eslint-disable-next-line nonblock-statement-body-position
-        for (let i = 0; i < updatedProducts.length; i++) {
-          if (updatedProducts[i].id === action.product.id) {
-            updatedProducts[i].quantity++;
-            break;
-          }
-          updatedProducts.push(action.product);
-        }
+        const productToAdd = updatedProducts.find(
+          item => item.id === action.product.id
+        );
+        if (productToAdd) productToAdd.quantity++;
+        else updatedProducts.push(action.product);
       }
       return {
         ...state,
