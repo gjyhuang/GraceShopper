@@ -93,7 +93,6 @@ export default function(state = defaultCart, action) {
 
       //this code takes care of if the item is already in cart - will increase quantity by 1
       const updatedProducts = [...state.products];
-      // debugger;
       if (!updatedProducts.length) updatedProducts.push(action.product);
       else {
         const productToAdd = updatedProducts.find(
