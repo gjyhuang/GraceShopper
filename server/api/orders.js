@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // route for getting order contents
-router.get('/:id', async (req, res, next) => {
+router.get('/:id/', async (req, res, next) => {
   try {
     // get the order specified in slug
     const order = await Order.findByPk(req.params.id, {

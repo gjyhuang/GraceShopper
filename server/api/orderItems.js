@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/:orderId', async (req, res, next) => {
   try {
-    console.log(req.body);
+    console.log('body inside server/api/orderItems(17)', req.body);
     const productId = req.body.productId;
     // access the product model to get the item's current price
     const {price} = await Product.findByPk(productId);
@@ -24,6 +24,16 @@ router.post('/:orderId', async (req, res, next) => {
       price
     });
     res.json(newOrderItem);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/', async (req, res, next) => {
+  try {
+    // destroy row according to item Id in req body
+    await OrderItem.destroy({where: {id: req.body.id}});
+    res.status(200);
   } catch (error) {
     next(error);
   }
