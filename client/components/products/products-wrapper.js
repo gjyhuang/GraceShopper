@@ -15,12 +15,12 @@ class ProductsWrapper extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(event.target);
     const productId = Number(event.target.name);
     const productToAdd = this.props.products.find(
       item => item.id === productId
     );
     productToAdd.quantity = 1;
+    console.log(productToAdd, 'product to add on handleSubmit');
     this.props.addToCart(productToAdd);
   }
 
