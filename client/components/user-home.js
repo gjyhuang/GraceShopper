@@ -2,15 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
+import {getCartItemsThunkCreator, createCartThunkCreator} from '../store/cart';
 /**
  * COMPONENT
  */
 
-// on component did mount, check if the orders array includes one that's pending. If so, call getCartItemsThunkCreator on it. If not, call createCartThunkCreator.
-
 export class UserHome extends React.Component {
   constructor(props) {
     super(props);
+  }
+  componentDidMount() {
+    // on component did mount, check if the orders array includes one that's pending. If so, call getCartItemsThunkCreator on it. If not, call createCartThunkCreator.
+    console.log('component did mount');
+    let openCart = null;
+    if (this.props.orders) {
+      openCart = this.props.orders.filter(order => order.status === 'in cart');
+      // if there is an open cart, get its ID and thunk to get the items
+      if (!openCart) {
+        // if no open cart, create one
+        console.log('no open cart');
+        this.props.createCart(this.props.userId);
+      } else {
+        console.log('has open cart', openCart[0]);
+        this.props.getCartItems(openCart[0].id);
+      }
+    }
   }
   render() {
     const {email} = this.props;
@@ -27,10 +43,22 @@ export class UserHome extends React.Component {
  */
 const mapState = state => ({
   email: state.user.email,
-  name: state.user.firstName
+  name: state.user.firstName,
+  orders: state.user.orders,
+  userId: state.user.id
 });
 
-export default connect(mapState)(UserHome);
+const mapDispatch = dispatch => {
+  return {
+    getCartItems: cartId => {
+      console.log('about to dispatch get cart items thunk creator');
+      return dispatch(getCartItemsThunkCreator(cartId));
+    },
+    createCart: userId => dispatch(createCartThunkCreator(userId))
+  };
+};
+
+export default connect(mapState, mapDispatch)(UserHome);
 
 /**
  * PROP TYPES

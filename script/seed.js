@@ -73,7 +73,7 @@ const orders = [
   {status: 'delivered', userId: 1},
   {status: 'in transit', userId: 2},
   {status: 'in cart', userId: 4},
-  {status: 'in cart', userId: 4}
+  {status: 'in cart', userId: 3}
 ];
 
 const orderItems = [

@@ -27,7 +27,6 @@ router.get('/:id', async (req, res, next) => {
       attributes: ['id', 'firstName', 'lastName', 'email'],
       include: [{model: Order}]
     });
-
     if (user) {
       res.json(user);
     } else {

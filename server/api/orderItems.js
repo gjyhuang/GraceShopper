@@ -18,7 +18,7 @@ router.get('/:orderId', async (req, res, next) => {
       where: {orderId: req.params.orderId}
     });
     res.json(oneOrderItems);
-  } catch {
+  } catch (error) {
     next(error);
   }
 });
