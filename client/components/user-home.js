@@ -18,7 +18,8 @@ export class UserHome extends React.Component {
     if (this.props.orders) {
       openCart = this.props.orders.filter(order => order.status === 'in cart');
       // if there is an open cart, get its ID and thunk to get the items
-      if (!openCart) {
+      console.log('before if block on openCart');
+      if (!openCart[0]) {
         // if no open cart, create one
         console.log('no open cart');
         this.props.createCart(this.props.userId);

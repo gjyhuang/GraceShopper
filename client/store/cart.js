@@ -67,7 +67,7 @@ export const getCartItemsThunkCreator = orderId => async dispatch => {
 
 export const createCartThunkCreator = userId => async dispatch => {
   try {
-    const data = await axios.post('/api/orders/', {
+    const {data} = await axios.post('/api/orders/', {
       status: 'in cart',
       userId: userId
     });
