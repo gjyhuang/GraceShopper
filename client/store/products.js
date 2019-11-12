@@ -1,6 +1,6 @@
 import axios from 'axios';
 import history from '../history';
-import {addToCart} from '../store/cart';
+import {addToCart, addToCartThunk} from '../store/cart';
 
 /**
  * ACTION TYPES
@@ -41,9 +41,19 @@ export const getAllProductsThunk = () => async dispatch => {
   }
 };
 
-export const addToCartThunk = product => dispatch => {
+export const addToCartThunkProducts = product => (dispatch, getState) => {
+  const state = getState();
+  console.log(state);
   // wrap the backend thunk with if statement to see if order Id doesn't exist
-
+  if (state.cart.orderId > 0) {
+    console.log(
+      'this product is being dispatched from products reducer to cart reducer',
+      product
+    );
+    dispatch(addToCartThunk(product.id));
+    // if there's an orderId, I want to go to the backend. if not, just frontend.
+    // ajax to create new row in orderItems
+  }
   dispatch(addToCart(product));
 };
 

@@ -63,7 +63,7 @@ export const getCartId = userId => async dispatch => {
 export const getCartItemsThunkCreator = orderId => async dispatch => {
   // ajax get request to orderItems table
   const {data} = await axios.get(`/api/orderItems/${orderId}`);
-  console.log('get cart items thunk creator - data from db', data);
+
   dispatch(gotCart(data, orderId));
   // update cart total thunk also needs to run here
   // dispatch(updateCartTotalThunkCreator(data));
@@ -76,7 +76,9 @@ export const createCartThunkCreator = userId => async dispatch => {
       userId: userId
     });
     dispatch(gotCart(data));
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const addToCartThunk = productId => async (dispatch, getState) => {
