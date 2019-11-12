@@ -12,9 +12,20 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/:orderId', async (req, res, next) => {
+  try {
+    const oneOrderItems = await OrderItem.findAll({
+      where: {orderId: req.params.orderId}
+    });
+    res.json(oneOrderItems);
+  } catch {
+    next(error);
+  }
+});
+
 router.post('/:orderId', async (req, res, next) => {
   try {
-    console.log('body inside server/api/orderItems(17)', req.body);
+    console.log('body inside server/api/orderItems', req.body);
     const productId = req.body.productId;
     // access the product model to get the item's current price
     const {price} = await Product.findByPk(productId);

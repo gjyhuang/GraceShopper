@@ -8,7 +8,7 @@ export {default as Navbar} from './navbar';
 
 // USER
 export {default as UserHome} from './user-home';
-export {default as EditProfile} from './edit-profile-form';
+// export {default as EditProfile} from './edit-profile-form';
 
 // LOGIN / SIGNUP
 export {Login, Signup} from './auth-form';
