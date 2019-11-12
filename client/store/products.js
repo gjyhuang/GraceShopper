@@ -42,6 +42,8 @@ export const getAllProductsThunk = () => async dispatch => {
 };
 
 export const addToCartThunk = product => dispatch => {
+  // wrap the backend thunk with if statement to see if order Id doesn't exist
+
   dispatch(addToCart(product));
 };
 

@@ -27,9 +27,9 @@ const createUser = user => ({type: CREATE_USER, user});
 /**
  * THUNK CREATORS
  */
-export const me = () => async dispatch => {
+export const me = user => async dispatch => {
   try {
-    const res = await axios.get('/auth/me');
+    const res = await axios.get('/auth/me', user);
     dispatch(getUser(res.data || defaultUser));
     // dispatch thunk that goes to the cart reducer with the user's ID
   } catch (err) {

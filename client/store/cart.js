@@ -40,7 +40,11 @@ export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
 export const emptyCart = () => ({type: EMPTY_CART});
 // export const getCart = userId => ({type: GET_CART, userId});
-export const gotCart = cartContents => ({type: GOT_CART, cartContents, cartId});
+export const gotCart = (cartContents, cartId) => ({
+  type: GOT_CART,
+  cartContents,
+  cartId
+});
 
 /**
  * THUNK CREATORS
@@ -58,8 +62,8 @@ export const getCartId = userId => async dispatch => {
 // thunk creator dispatched when fetching the cart - takes the cart's order ID and fetches its contents from orderItems. This is dispatched from User - because user's Order histry is now loaded when they log in
 export const getCartItemsThunkCreator = orderId => async dispatch => {
   // ajax get request to orderItems table
-  console.log('get cart items thunk creator');
   const {data} = await axios.get(`/api/orderItems/${orderId}`);
+  console.log('get cart items thunk creator - data from db', data);
   dispatch(gotCart(data, orderId));
   // update cart total thunk also needs to run here
   // dispatch(updateCartTotalThunkCreator(data));
@@ -75,18 +79,19 @@ export const createCartThunkCreator = userId => async dispatch => {
   } catch (error) {}
 };
 
-export const addToCartThunk = (productId, orderId) => async (
-  dispatch,
-  getState
-) => {
+export const addToCartThunk = productId => async (dispatch, getState) => {
   try {
-    await axios.post(`/api/orderItems/${orderId}`, {productId});
     let state = getState();
+    if (state.user.id) {
+      await axios.post(`/api/orderItems/${state.cart.orderId}`, {productId});
+    }
     const selectedProduct = state.cart.products.find(
       product => product.id === Number(productId)
     );
     dispatch(addToCart(selectedProduct));
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // CREATE CART THUNK CREATOR

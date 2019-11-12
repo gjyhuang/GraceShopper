@@ -42,13 +42,15 @@ export class UserHome extends React.Component {
 /**
  * CONTAINER
  */
-const mapState = state => ({
-  email: state.user.email,
-  name: state.user.firstName,
-  orders: state.user.orders,
-  userId: state.user.id
-});
-
+const mapState = state => {
+  console.log(state);
+  return {
+    email: state.user.email,
+    name: state.user.firstName,
+    orders: state.user.orders,
+    userId: state.user.id
+  };
+};
 const mapDispatch = dispatch => {
   return {
     getCartItems: cartId => {
