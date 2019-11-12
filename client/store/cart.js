@@ -17,13 +17,13 @@ const CHECKOUT = 'CHECKOUT';
 const CALC_TOTAL = 'CALC_TOTAL';
 const EMPTY_CART = 'EMPTY_CART';
 // for thunk creator, need two actions - one to dispatch when you want to see the cart, the other when you got the cart and want to update state accordingly
-const GET_CART = 'GET_CART';
 const GOT_CART = 'GOT_CART';
 
 /**
  * INITIAL STATE
  */
 const defaultCart = {
+  orderId: 0,
   products: [],
   total: 0
 };
@@ -40,7 +40,7 @@ export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
 export const emptyCart = () => ({type: EMPTY_CART});
 // export const getCart = userId => ({type: GET_CART, userId});
-export const gotCart = cartContents => ({type: GOT_CART, cartContents});
+export const gotCart = cartContents => ({type: GOT_CART, cartContents, cartId});
 
 /**
  * THUNK CREATORS
@@ -60,7 +60,7 @@ export const getCartItemsThunkCreator = orderId => async dispatch => {
   // ajax get request to orderItems table
   console.log('get cart items thunk creator');
   const {data} = await axios.get(`/api/orderItems/${orderId}`);
-  dispatch(gotCart(data));
+  dispatch(gotCart(data, orderId));
   // update cart total thunk also needs to run here
   // dispatch(updateCartTotalThunkCreator(data));
 };
@@ -75,12 +75,18 @@ export const createCartThunkCreator = userId => async dispatch => {
   } catch (error) {}
 };
 
-export const addToCartThunk = productId => (dispatch, getState) => {
-  let state = getState();
-  const selectedProduct = state.cart.products.find(
-    product => product.id === Number(productId)
-  );
-  dispatch(addToCart(selectedProduct));
+export const addToCartThunk = (productId, orderId) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    await axios.post(`/api/orderItems/${orderId}`, {productId});
+    let state = getState();
+    const selectedProduct = state.cart.products.find(
+      product => product.id === Number(productId)
+    );
+    dispatch(addToCart(selectedProduct));
+  } catch (error) {}
 };
 
 // CREATE CART THUNK CREATOR
@@ -94,7 +100,7 @@ export default function(state = defaultCart, action) {
   switch (action.type) {
     case GOT_CART: {
       // replace whatever is in the state cart with the stuff that just came back from the DB
-      return {...state, products: action.cartContents};
+      return {...state, products: action.cartContents, orderId: action.cartId};
     }
     case ADD_TO_CART: {
       // when add to cart button clicked, update cart prop on state to include this new item
