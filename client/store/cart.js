@@ -117,9 +117,10 @@ export default function(state = defaultCart, action) {
       const updatedProducts = [...state.products];
       if (!updatedProducts.length) updatedProducts.push(action.product);
       else {
-        const productToAdd = updatedProducts.find(
-          item => item.id === action.product.id
-        );
+        const productToAdd = updatedProducts.find(item => {
+          console.log('item in add to cart reducer', item);
+          item.id === action.product.id;
+        });
         if (productToAdd) productToAdd.quantity++;
         else updatedProducts.push(action.product);
       }
