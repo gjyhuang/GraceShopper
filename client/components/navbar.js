@@ -39,7 +39,10 @@ const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
  */
 const mapState = state => ({
   isLoggedIn: !!state.user.id,
-  cartSize: state.cart.products.length
+  // cartSize: state.cart.products.length
+  cartSize: state.cart.products.reduce((acc, currItem) => {
+    return currItem.quantity + acc;
+  }, 0)
 });
 
 const mapDispatch = dispatch => ({
