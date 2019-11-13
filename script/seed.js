@@ -1,5 +1,4 @@
 const db = require('../server/db');
-const {green, red} = require('chalk');
 const {User, Product, Order} = require('../server/db/models/index');
 
 const products = [
@@ -98,7 +97,7 @@ const seed = async () => {
     })
   );
 
-  console.log(green('Seeding success!'));
+  console.log('Seeding success!');
 
   db.close();
 };
