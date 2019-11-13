@@ -23,7 +23,7 @@ const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
               Logout
             </a>
             <Link className="nav-right" to="/cart">
-              Cart {`(${cartSize})`}
+              <div className="nav-cart"><img src="images/cart-icon.png" height="22px" /></div> {`(${cartSize})`}
             </Link>
             <Link className="nav-right" to="/profile">My Account</Link>
           </div>
@@ -42,7 +42,7 @@ const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
             {/* The navbar will show these links before you log in */}
             <Link to="/login">Login</Link>
             <Link to="/signup">Sign Up</Link>
-            <Link to="/cart">Cart {`(${cartSize})`}</Link>
+            <Link to="/cart"><div className="nav-cart"><img src="images/cart-icon.png" height="22px" /></div> {`(${cartSize})`}</Link>
           </div>
         </div>
       )}
