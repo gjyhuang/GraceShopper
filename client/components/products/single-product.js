@@ -16,6 +16,7 @@ const SingleProduct = props => {
         <div className="product-img"><img src={props.imageUrl} height="50%" width="50%" /></div>
       </div>
       <div className="product-buy-btn">
+
         <form>
           <button type="submit" name={props.id} onClick={props.handleSubmit}>
             Add to cart

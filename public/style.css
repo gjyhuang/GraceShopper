@@ -63,6 +63,7 @@ form div {
   position: fixed;
   left: 0;
   top: 0;
+  position: relative;
 }
 
 #nav-left {
@@ -287,4 +288,16 @@ form button {
 #user-page-wrapper a:hover, #login-form a:hover, #signin-form a:hover {
   color: #DADADA;
   transition: 0.4s;
+}
+
+.products-list-all {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.product-div {
+  display: flex;
+  flex-direction: row;
 }

@@ -46,6 +46,7 @@ class ProductsWrapper extends React.Component {
                 />
             ))}
           </div>
+
         </div>
       </div>
     );
