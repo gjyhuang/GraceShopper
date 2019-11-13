@@ -39,7 +39,6 @@ export const removeFromCart = productId => ({
 export const checkout = () => ({type: CHECKOUT});
 export const calcTotal = () => ({type: CALC_TOTAL});
 export const emptyCart = () => ({type: EMPTY_CART});
-// export const getCart = userId => ({type: GET_CART, userId});
 export const gotCart = (cartContents, cartId) => ({
   type: GOT_CART,
   cartContents,
@@ -58,7 +57,6 @@ export const getCartId = userId => async dispatch => {
   const {orders} = data;
   const openCart = orders.filter(order => order.status === 'in cart');
   if (openCart) dispatch(getCart());
-  // const cartId =
 };
 
 // thunk creator dispatched when fetching the cart - takes the cart's order ID and fetches its contents from orderItems. This is dispatched from User - because user's Order histry is now loaded when they log in
@@ -68,7 +66,6 @@ export const getCartItemsThunkCreator = orderId => async dispatch => {
 
   dispatch(gotCart(data, orderId));
   // update cart total thunk also needs to run here
-  // dispatch(updateCartTotalThunkCreator(data));
 };
 
 export const createCartThunkCreator = userId => async dispatch => {

@@ -9,7 +9,8 @@ import {
   UserHome,
   Products,
   EditProfile,
-  CartWrapper
+  CartWrapper,
+  DefaultHome
 } from './components';
 
 /**
