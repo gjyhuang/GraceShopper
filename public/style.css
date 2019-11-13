@@ -52,6 +52,7 @@ form div {
   position: fixed;
   left: 0;
   top: 0;
+  position: relative;
 }
 
 #nav-left {
@@ -116,4 +117,16 @@ form div {
   flex-grow: 1;
   border: 5px;
   border-color: #ffffff;
+}
+
+.products-list-all {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.product-div {
+  display: flex;
+  flex-direction: row;
 }
