@@ -6,27 +6,37 @@ import {logout} from '../store';
 
 const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
   <div>
-    <h1>
-      <Link to="/home">THE ARMORY</Link>
-    </h1>
     <nav>
       {isLoggedIn ? (
-        <div>
+        <div id="nav-bar">
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/products">See all our products</Link>
-          <Link to="/cart">Cart {`(${cartSize})`}</Link>
+          <div id="nav-left">
+            <Link to="/home">THE ARMORY</Link>
+            <Link to="/home">Home</Link>
+            <Link to="/products">Products</Link>
+          </div>
+          <div id="nav-right">
+            <a href="#" onClick={handleClick}>
+              Logout
+            </a>
+            <Link className="nav-right" to="/cart">
+              Cart {`(${cartSize})`}
+            </Link>
+          </div>
         </div>
       ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">See all our products</Link>
-          <Link to="/cart">Cart {`(${cartSize})`}</Link>
+        <div id="nav-bar">
+          <div id="nav-left">
+            <Link to="/">THE ARMORY</Link>
+            <Link to="/">Home</Link>
+            <Link to="/products">Products</Link>
+          </div>
+          <div id="nav-right">
+            {/* The navbar will show these links before you log in */}
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
+            <Link to="/cart">Cart {`(${cartSize})`}</Link>
+          </div>
         </div>
       )}
     </nav>
