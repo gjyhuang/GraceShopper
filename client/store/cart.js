@@ -50,6 +50,8 @@ export const gotCart = (cartContents, cartId) => ({
  * THUNK CREATORS
  */
 
+// decrement or destroy cart item
+
 // get or create cart
 export const getCartId = userId => async dispatch => {
   const data = await axios.get(`api/users/${userId}`);
@@ -84,12 +86,14 @@ export const createCartThunkCreator = userId => async dispatch => {
 export const addToCartThunk = productId => async (dispatch, getState) => {
   try {
     let state = getState();
+    console.log({state});
     if (state.user.id) {
       await axios.post(`/api/orderItems/${state.cart.orderId}`, {productId});
     }
     const selectedProduct = state.cart.products.find(
       product => product.id === Number(productId)
     );
+    console.log('product in add to cart thunk in cart store', selectedProduct);
     dispatch(addToCart(selectedProduct));
   } catch (error) {
     console.error(error);
@@ -114,13 +118,14 @@ export default function(state = defaultCart, action) {
       // also needs to take care of the price - find the new item's price and add it to the current total
 
       //this code takes care of if the item is already in cart - will increase quantity by 1
+
       const updatedProducts = [...state.products];
       if (!updatedProducts.length) updatedProducts.push(action.product);
       else {
-        const productToAdd = updatedProducts.find(item => {
-          console.log('item in add to cart reducer', item);
-          item.id === action.product.id;
-        });
+        console.log(updatedProducts);
+        const productToAdd = updatedProducts.find(
+          item => item.id === action.product.id
+        );
         if (productToAdd) productToAdd.quantity++;
         else updatedProducts.push(action.product);
       }

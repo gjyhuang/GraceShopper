@@ -6,7 +6,6 @@ import {logout} from '../../store';
 import CartItem from './cart-item';
 
 const Cart = props => {
-  console.log('props in cart component', props);
   const price = props.total.toString();
   return (
     <div id="cart-page">
@@ -16,7 +15,7 @@ const Cart = props => {
           {props.cartItems.map(item => (
             <CartItem
               key={item.id}
-              {...item}
+              item={item}
               handleAdd={props.handleAdd}
               handleRemove={props.handleRemove}
             />

@@ -23,7 +23,6 @@ class ProductsWrapper extends React.Component {
       item => item.id === productId
     );
     productToAdd.quantity = 1;
-    console.log(productToAdd, 'product to add on handleSubmit');
     this.props.addToCart(productToAdd);
   }
 

@@ -42,7 +42,6 @@ export class CartWrapper extends React.Component {
     this.props.checkoutAction();
   }
   render() {
-    console.log(this.props, '<<<<< props in cart-wrapper component');
     return this.props.itemsInCart.length > 0 ? (
       <div>
         <div> this is the cart wrapper component</div>
@@ -79,8 +78,9 @@ const mapDispatchToProps = function(dispatch) {
   };
 };
 
-const ConnectedCartWrapper = connect(mapStateToProps, mapDispatchToProps)(
-  CartWrapper
-);
+const ConnectedCartWrapper = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CartWrapper);
 
 export default ConnectedCartWrapper;

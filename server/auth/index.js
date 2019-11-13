@@ -5,8 +5,6 @@ module.exports = router;
 
 router.post('/login', async (req, res, next) => {
   try {
-    console.log('login route hit');
-    console.log('req', req.body);
     const user = await User.findOne({
       where: {email: req.body.email},
       include: [{model: Order}]
@@ -45,8 +43,6 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/me', (req, res) => {
-  console.log('me route hit');
-  console.log('req', req.body);
   res.json(req.user);
 });
 

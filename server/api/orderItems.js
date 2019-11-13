@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const {OrderItem, Product} = require('../db/models/index');
+const Sequelize = require('sequelize');
 
 module.exports = router;
 
@@ -26,16 +27,25 @@ router.get('/:orderId', async (req, res, next) => {
 
 router.post('/:orderId', async (req, res, next) => {
   try {
-    console.log('body inside server/api/orderItems', req.body);
     const productId = req.body.productId;
-    // access the product model to get the item's current price
-    const {price} = await Product.findByPk(productId);
-    const newOrderItem = await OrderItem.create({
-      orderId: req.params.orderId,
-      productId,
-      price
+    const orderId = req.params.orderId;
+    // get all the items in that order ID
+    let wholeOrder = await OrderItem.findAll({
+      where: {orderId: req.params.orderId}
     });
-    res.json(newOrderItem);
+    wholeOrder = wholeOrder.map(item => item.get({plain: true}));
+    // find the one of them that has the product id that's in the req.body
+    let soughtItem = wholeOrder.find(item => item.productId === productId);
+    // if it's undefined, create new record with this item's ID and the price from the Product model
+    if (!soughtItem) {
+      const newItem = await OrderItem.create({productId, orderId});
+      res.json(newItem);
+    } else {
+      // if it's not undefined, make a change to it - quantity++
+      const itemInOrder = await OrderItem.findByPk(soughtItem.id);
+      const updatedQuantItem = await itemInOrder.increment('quantity');
+      res.json(updatedQuantItem);
+    }
   } catch (error) {
     next(error);
   }
@@ -50,3 +60,18 @@ router.delete('/', async (req, res, next) => {
     next(error);
   }
 });
+
+// console.log('body inside server/api/orderItems', req.body);
+// const productId = req.body.productId;
+// // access the product model to get the item's current price
+// const product = await Product.findByPk(productId);
+// // const price = data.price;
+// console.log('data in router post orderId of orderItems', product);
+// const price = product.dataValues.price;
+// const newOrderItem = await OrderItem.create({
+//   orderId: req.params.orderId,
+//   productId,
+//   price
+// });
+// console.log('order item', newOrderItem);
+// res.json(newOrderItem.dataValues);
