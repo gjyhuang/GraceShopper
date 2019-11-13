@@ -1,5 +1,18 @@
 body {
   font-family: sans-serif;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+#wrap-bg {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  background-image: url('stone-bg-img.jpg');
+  background-size: 100vw;
+  opacity: 0.2;
+  z-index: -3;
+  top: 0;
 }
 
 a {
@@ -12,6 +25,7 @@ label {
 
 nav a {
   display: inline-flex;
+  color: #ffffff;
   margin: 1em;
 }
 
@@ -19,31 +33,87 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
 @font-face {
   font-family: 'Literata';
   src: url('https://fonts.googleapis.com/css?family=Literata&display=swap');
 }
+
 #nav-bar {
   display: flex;
   align-items: baseline;
+  align-content: center;
   justify-content: space-between;
   padding: 1em;
+  font-family: 'Libre Baskerville', serif;
+  height: 80px;
+  padding: 10px;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
-#home-bar {
+#nav-left {
   display: flex;
-  justify-content: center;
-  text-align: center;
+  align-items: flex-start;
 }
 
-#Home-Title {
+.divider {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 16px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#home {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-top: 80px;
+  flex-direction: column;
+}
+
+#home-bg {
+  height: auto;
+  width: auto;
+  z-index: -1;
+  position: absolute;
+  top: 130px;
+  right: 100px;
+}
+
+#home-title {
   font-family: 'Literata';
 }
+
 #header {
-  position: absolute;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+  margin-top: 100px;
 }
+
+#subheader {
+  font-family: 'Century Gothic', 'Arial';
+  width: 170px;
+}
+
 #product-bar {
+  width: 70%;
+  flex-basis: 100%;
   display: flex;
-  position: relative;
-  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+#product-bar-more a {
+  font-family: 'Century Gothic', 'Arial';
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.product-bar-div {
+  flex-grow: 1;
+  border: 5px;
+  border-color: #ffffff;
 }

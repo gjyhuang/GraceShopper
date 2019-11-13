@@ -11,8 +11,11 @@ const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
         <div id="nav-bar">
           {/* The navbar will show these links after you log in */}
           <div id="nav-left">
-            <Link to="/home">THE ARMORY</Link>
-            <Link to="/home">Home</Link>
+            <div className="nav-links">
+              <Link to="/">THE ARMORY</Link>
+            </div>
+            <div className="divider"> | </div>
+            <div className="nav-links" />
             <Link to="/products">Products</Link>
           </div>
           <div id="nav-right">
@@ -27,8 +30,11 @@ const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
       ) : (
         <div id="nav-bar">
           <div id="nav-left">
-            <Link to="/">THE ARMORY</Link>
-            <Link to="/">Home</Link>
+            <div className="nav-links">
+              <Link to="/">THE ARMORY</Link>
+            </div>
+            <div className="divider"> | </div>
+            <div className="nav-links" />
             <Link to="/products">Products</Link>
           </div>
           <div id="nav-right">
@@ -40,7 +46,6 @@ const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
         </div>
       )}
     </nav>
-    <hr />
   </div>
 );
 
