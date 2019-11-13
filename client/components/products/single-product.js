@@ -6,7 +6,6 @@ import {logout} from '../../store';
 
 const SingleProduct = props => {
   const price = props.price.toString();
-  console.log(props, 'props inside render of singleproduct component');
   return (
     <div>
       <h2>{props.name}</h2>

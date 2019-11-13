@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const {OrderItem, Product} = require('../db/models/index');
-const Sequelize = require('sequelize');
 
 module.exports = router;
 
@@ -60,18 +59,3 @@ router.delete('/', async (req, res, next) => {
     next(error);
   }
 });
-
-// console.log('body inside server/api/orderItems', req.body);
-// const productId = req.body.productId;
-// // access the product model to get the item's current price
-// const product = await Product.findByPk(productId);
-// // const price = data.price;
-// console.log('data in router post orderId of orderItems', product);
-// const price = product.dataValues.price;
-// const newOrderItem = await OrderItem.create({
-//   orderId: req.params.orderId,
-//   productId,
-//   price
-// });
-// console.log('order item', newOrderItem);
-// res.json(newOrderItem.dataValues);
