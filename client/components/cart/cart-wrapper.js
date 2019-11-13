@@ -43,8 +43,7 @@ export class CartWrapper extends React.Component {
   }
   render() {
     return this.props.itemsInCart.length > 0 ? (
-      <div>
-        <div> this is the cart wrapper component</div>
+      <div id="cart-wrapper">
         <Cart
           cartItems={this.props.itemsInCart}
           handleAdd={this.handleAdd}
