@@ -13,18 +13,14 @@ export class UserHome extends React.Component {
   }
   componentDidMount() {
     // on component did mount, check if the orders array includes one that's pending. If so, call getCartItemsThunkCreator on it. If not, call createCartThunkCreator.
-    console.log('component did mount');
     let openCart = null;
     if (this.props.orders) {
       openCart = this.props.orders.filter(order => order.status === 'in cart');
       // if there is an open cart, get its ID and thunk to get the items
-      console.log('before if block on openCart');
       if (!openCart[0]) {
         // if no open cart, create one
-        console.log('no open cart');
         this.props.createCart(this.props.userId);
       } else {
-        console.log('has open cart', openCart[0]);
         this.props.getCartItems(openCart[0].id);
       }
     }

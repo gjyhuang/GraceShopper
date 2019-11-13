@@ -1,6 +1,5 @@
 import axios from 'axios';
-import history from '../history';
-import {getUser} from './user';
+import history from '../../history';
 
 /* EV: functionalities that should be brought in here:
 1. add an item to the cart

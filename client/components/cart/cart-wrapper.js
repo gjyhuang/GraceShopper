@@ -38,7 +38,7 @@ export class CartWrapper extends React.Component {
   }
 
   handleCheckout(event) {
-    event.preventDefault();
+    if (event.target) event.preventDefault();
     this.props.checkoutAction();
   }
   render() {

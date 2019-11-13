@@ -21,19 +21,17 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/profile', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.id, {
-      attributes: ['id', 'firstName', 'lastName', 'email'],
-      include: [{model: Order}]
-    });
-    if (user) {
-      res.json(user);
+    if (!req.session.passport) {
+      res.status(401).send('Unauthorized');
     } else {
-      res.sendStatus(404).end();
+      const userId = req.session.passport.user;
+      const userData = await User.findByPk(userId);
+      res.json(userData);
     }
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -43,5 +41,25 @@ router.post('/signup', async (req, res, next) => {
     res.json(newUser);
   } catch (err) {
     next(err);
+  }
+});
+
+router.put('/profile', async (req, res, next) => {
+  try {
+    if (!req.session.passport) {
+      res.status(401).send('Unauthorized');
+    } else {
+      const userId = req.session.passport.user;
+      const updateProfileData = req.body;
+      await User.update(updateProfileData, {
+        where: {
+          id: userId
+        }
+      });
+      const userData = await User.findByPk(userId);
+      res.json(userData);
+    }
+  } catch (error) {
+    next(error);
   }
 });

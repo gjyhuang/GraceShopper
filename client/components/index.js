@@ -6,6 +6,9 @@
 // NAVBAR
 export {default as Navbar} from './navbar';
 
+//Default Home Page
+export {default as DefaultHome} from './defaultHome';
+
 // USER
 export {default as UserHome} from './user-home';
 // export {default as EditProfile} from './edit-profile-form';
