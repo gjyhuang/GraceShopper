@@ -34,7 +34,9 @@ class ProductsWrapper extends React.Component {
     const products = this.props.products;
     return (
       <div className="products-list-all">
-        <h1>Swords</h1>
+        <div id="swords-header">
+          <h1>Swords</h1>
+        </div>
         <hr />
         <div className="product-div-wrapper">
           {products.map((product, index) => (
