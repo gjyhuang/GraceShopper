@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../../store';
 import CartItem from './cart-item';
+import CheckoutStripe from './checkout-stripe';
 
 const Cart = props => {
   const price = props.total.toString();
@@ -15,7 +16,7 @@ const Cart = props => {
           {props.cartItems.map(item => (
             <CartItem
               key={item.id}
-              {...item}
+              item={item}
               handleAdd={props.handleAdd}
               handleRemove={props.handleRemove}
             />
@@ -23,14 +24,18 @@ const Cart = props => {
         </tbody>
       </table>
       <div id="cart-total">
-        Total: ${price.slice(0, price.length - 2)}.{price.slice(
-          price.length - 2
-        )}
+        Total: ${price.slice(0, price.length - 2)}.
+        {price.slice(price.length - 2)}
       </div>
       <div id="cart-checkout">
-        <button type="submit" name="checkout" onClick={props.handleCheckout}>
-          Checkout
-        </button>
+        <div id="cart-checkout-main-btn">
+          <button type="submit" name="checkout" onClick={props.handleCheckout}>
+            Checkout
+          </button>
+        </div>
+        <div id="checkout-stripe">
+          <CheckoutStripe handleCheckout={props.handleCheckout} />
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,10 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {logout} from '../../store';
 import SingleProduct from './single-product';
-import {getAllProductsThunk, addToCartThunk} from '../../store/products';
+import {
+  getAllProductsThunk,
+  addToCartThunkProducts
+} from '../../store/products';
 
 class ProductsWrapper extends React.Component {
   constructor(props) {
@@ -52,7 +55,7 @@ class ProductsWrapper extends React.Component {
 const mapDispatch = dispatch => {
   return {
     getAllProducts: () => dispatch(getAllProductsThunk()),
-    addToCart: product => dispatch(addToCartThunk(product))
+    addToCart: product => dispatch(addToCartThunkProducts(product))
   };
 };
 

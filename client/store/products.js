@@ -1,12 +1,11 @@
 import axios from 'axios';
 import history from '../history';
-import {addToCart} from '../store/cart';
+import {addToCart, addToCartThunk} from './cart';
 
 /**
  * ACTION TYPES
  */
 const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
-// const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT';
 
 /**
  * INITIAL STATE
@@ -24,10 +23,6 @@ const getAllProducts = products => ({
   products
 });
 
-// const getSingleProduct = product => ({
-//   type:
-// })
-
 /**
  * THUNK CREATORS
  */
@@ -41,7 +36,14 @@ export const getAllProductsThunk = () => async dispatch => {
   }
 };
 
-export const addToCartThunk = product => dispatch => {
+export const addToCartThunkProducts = product => (dispatch, getState) => {
+  const state = getState();
+  // wrap the backend thunk with if statement to see if order Id doesn't exist
+  if (state.cart.orderId > 0) {
+    dispatch(addToCartThunk(product.id));
+    // if there's an orderId, I want to go to the backend. if not, just frontend.
+    // ajax to create new row in orderItems
+  }
   dispatch(addToCart(product));
 };
 

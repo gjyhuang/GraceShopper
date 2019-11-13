@@ -25,6 +25,7 @@ const Navbar = ({handleClick, isLoggedIn, cartSize}) => (
             <Link className="nav-right" to="/cart">
               Cart {`(${cartSize})`}
             </Link>
+            <Link className="nav-right" to="/profile">My Account</Link>
           </div>
         </div>
       ) : (
