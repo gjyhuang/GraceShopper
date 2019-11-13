@@ -1,6 +1,6 @@
 import axios from 'axios';
 import history from '../history';
-import {addToCart} from './cart';
+import {addToCart, addToCartThunk} from './cart';
 
 /**
  * ACTION TYPES
