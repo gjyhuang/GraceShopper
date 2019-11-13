@@ -17,8 +17,7 @@ class UserProfile extends React.Component {
     const data = {
       firstName: event.target.firstName.value,
       lastName: event.target.lastName.value,
-      email: event.target.email.value,
-      shippingAddress: event.target.shippingAddress.value
+      email: event.target.email.value
     };
     this.props.updateUserProfileThunk(data);
   }

@@ -2,9 +2,15 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter, Route, Switch} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {CartWrapper} from './components/cart/';
 import {me} from './store';
-import {Login, Signup, UserHome, Products, EditProfile} from './components';
+import {
+  Login,
+  Signup,
+  UserHome,
+  Products,
+  EditProfile,
+  CartWrapper
+} from './components';
 
 /**
  * COMPONENT
