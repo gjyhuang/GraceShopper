@@ -31,15 +31,19 @@ class ProductsWrapper extends React.Component {
     const products = this.props.products;
     return (
       <div className="products-list-all">
-        <h1>Product list</h1>
+        <h1>Swords</h1>
         <hr />
-        {products.map(product => (
-          <SingleProduct
-            key={product.id}
-            {...product}
-            handleSubmit={this.handleSubmit}
-          />
-        ))}
+        <div className="product-div-wrapper">
+          {products.map((product, index) => (
+            <div id="product-div" key={`${index}`}>
+              <SingleProduct
+                key={product.id}
+                {...product}
+                handleSubmit={this.handleSubmit}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
