@@ -1,12 +1,11 @@
 import axios from 'axios';
-import history from '../history';
-import {addToCart} from '../store/cart';
+import history from '../../history';
+import {addToCart} from './cart';
 
 /**
  * ACTION TYPES
  */
 const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
-// const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT';
 
 /**
  * INITIAL STATE
@@ -23,10 +22,6 @@ const getAllProducts = products => ({
   type: GET_ALL_PRODUCTS,
   products
 });
-
-// const getSingleProduct = product => ({
-//   type:
-// })
 
 /**
  * THUNK CREATORS
