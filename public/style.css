@@ -11,11 +11,39 @@ label {
 }
 
 nav a {
-  display: inline-block;
+  display: inline-flex;
   margin: 1em;
 }
 
 form div {
   margin: 1em;
   display: inline-block;
+}
+@font-face {
+  font-family: 'Literata';
+  src: url('https://fonts.googleapis.com/css?family=Literata&display=swap');
+}
+#nav-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+#home-bar {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+#Home-Title {
+  font-family: 'Literata';
+}
+#header {
+  position: absolute;
+}
+#product-bar {
+  display: flex;
+  position: relative;
+  flex-direction: row;
 }
