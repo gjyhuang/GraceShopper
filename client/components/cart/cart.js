@@ -16,7 +16,7 @@ const Cart = props => {
           {props.cartItems.map(item => (
             <CartItem
               key={item.id}
-              {...item}
+              item={item}
               handleAdd={props.handleAdd}
               handleRemove={props.handleRemove}
             />
@@ -24,9 +24,8 @@ const Cart = props => {
         </tbody>
       </table>
       <div id="cart-total">
-        Total: ${price.slice(0, price.length - 2)}.{price.slice(
-          price.length - 2
-        )}
+        Total: ${price.slice(0, price.length - 2)}.
+        {price.slice(price.length - 2)}
       </div>
       <div id="cart-checkout">
         <div id="cart-checkout-main-btn">
